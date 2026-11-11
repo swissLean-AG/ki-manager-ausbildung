@@ -1153,7 +1153,7 @@ h3,
 
 /* ---------- Feste Leiste unten: Infogespräch und Anmelden ----------
    Auf jeder Seite immer sichtbar. Links die zwei Buchungslinks fürs Infogespräch, rechts der
-   Anmelde-Knopf zur neutralen Empfehlungsseite, grösser und auffälliger als alles andere in der Leiste. Die Höhe der
+   Anmelde-Knopf, der zur Buchung des Infogesprächs führt, grösser und auffälliger als alles andere in der Leiste. Die Höhe der
    Leiste steht in --leiste-hoehe; Halte, Einblendungen, Startkarte und Fuss halten über --unten-frei und diese Variable
    Abstand. Breitenstufen in rem, damit sie der Systemschrift folgen:
      ab 72rem   ganzer Text der Buchungslinks ("Infogespräch per Teams buchen")

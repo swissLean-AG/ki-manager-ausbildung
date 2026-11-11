@@ -40,7 +40,7 @@ async function starte() {
   // Gibt die Stationsbilder frei (buehne.css), auch für den ruhigen Modus und falls die Bühne später anhält.
   document.documentElement.classList.add('fahrt-gestartet');
   ladeZusatz();
-  for (const t of ausloeser) window.removeEventListener(t, aktiviere);
+  for (const t of ausloeser) window.removeEventListener(t, t === 'scroll' ? aktiviere : nachDemBild);
   const m = await ladeModule();
   const reduziert = m.reduziertGewuenscht();
   const mitte = merkeMitte(); // unmittelbar vor dem Umschalten, im selben Durchlauf
@@ -50,7 +50,7 @@ async function starte() {
   if (!reduziert) halte = m.starteHalte({ anker: () => m.fahrtAnker(), gleitet: () => gleitfahrt.laeuft() });
   const finale = document.querySelector('canvas.finale-flaeche');
   const abschnitt = m.leseManifest(wurzel)?.abschnitte.find((a) => a.id === 'chefetage-finale');
-  if (finale && abschnitt && !reduziert) {
+  if (finale && abschnitt && !reduziert && !m.nurSchluesselbilder()) {
     let bilder = m.fahrtBilder(abschnitt);
     let lauf = m.starteFinale(finale, bilder);
     // Andere Bildvariante nach Drehen oder Grössenänderung: Finale mit den passenden Bildern neu laden.
@@ -135,12 +135,13 @@ function nachDemStartbild(fn) {
 }
 async function vorladen() {
   const m = await ladeModule();
-  if (aktiv || m.reduziertGewuenscht()) return;
+  if (aktiv || m.reduziertGewuenscht() || m.nurSchluesselbilder()) return;
   const abschnitt = m.leseManifest(wurzel)?.abschnitte.find((a) => a.id === 'start-buero');
   if (!abschnitt) return;
   for (const url of m.fahrtBilder(abschnitt).slice(0, VORLADEN)) {
     const bild = new Image();
     bild.decoding = 'async';
+    bild.fetchPriority = 'low';
     bild.src = url;
   }
 }
@@ -162,7 +163,10 @@ starteNavigation(document.querySelector('.gebaeudeplan'));
 // Mit Sprungmarke geöffnet: sofort starten. Schon gescrollt geöffnet (der Browser stellt die Lage meist erst später
 // her und meldet das mit scroll): im ersten Bild nachsehen, wo das Layout ohnehin ansteht. Ein Lesen von scrollY
 // hier beim Laden erzwänge ein Layout der ganzen Seite als lange Aufgabe.
-for (const t of ausloeser) window.addEventListener(t, aktiviere, { passive: true });
+// Tippen und Tasten: die Bühne startet erst nach dem nächsten Bild, damit die Eingabe selbst sofort sichtbar wird
+// (Menü, Knopf). Beim Scrollen startet sie sofort, die Fahrt beginnt mit dem ersten Scroll.
+const nachDemBild = () => requestAnimationFrame(() => setTimeout(aktiviere, 0));
+for (const t of ausloeser) window.addEventListener(t, t === 'scroll' ? aktiviere : nachDemBild, { passive: true });
 if (location.hash) aktiviere();
 else
   requestAnimationFrame(() => {

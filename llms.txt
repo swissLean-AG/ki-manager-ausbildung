@@ -1,6 +1,6 @@
 # KI-Manager-Ausbildung der swissLean AG
 
-> Praxisausbildung für Schweizer KMU: In rund drei Monaten und sechs Online-Sessions baut eine Person aus dem Betrieb eigene KI-Werkzeuge und KI-Agenten für die eigenen Abläufe. Anbieterin ist die swissLean AG in Pfäffikon SZ, gegründet 2011, begleitet KMU mit Prozessanalyse, Lean Management, Automatisierung und KI. Kosten auf Anfrage im Informationsgespräch.
+> Praxisausbildung für Schweizer KMU: In rund drei Monaten und sechs Online-Sessions baut eine Person aus dem Betrieb eigene KI-Werkzeuge und KI-Agenten für die eigenen Abläufe. Anbieterin ist die swissLean AG in Pfäffikon SZ. Sie begleitet KMU mit Prozessanalyse, Lean Management, Automatisierung und KI. Kosten auf Anfrage im Informationsgespräch.
 
 Stand: 11.11.2026. Alle Inhalte auf Deutsch (Schweiz). Zahlen auf den Seiten sind belegt oder als Erfahrungswert bzw. Einschätzung der swissLean AG gekennzeichnet, Angaben von Teilnehmenden sind als ihre eigenen Angaben ausgewiesen.
 
@@ -9,6 +9,16 @@ Stand: 11.11.2026. Alle Inhalte auf Deutsch (Schweiz). Zahlen auf den Seiten sin
 - [Startseite](https://ki-manager-ausbildung.ch/): Von der Anfrage bis zur Schlussrechnung: wo KI im Hauptprozess eines Betriebs Zeit zurückgibt und wie du dein KI-Betriebssystem baust, mit Stimmen von Teilnehmenden und Buchung des Infogesprächs.
 - [Ausbildung](https://ki-manager-ausbildung.ch/ausbildung/): Aufbau, Inhalte, Ablauf und Leitung der KI-Manager-Ausbildung.
 - [Fragen und Antworten](https://ki-manager-ausbildung.ch/fragen/): Antworten für Chefs und Mitarbeitende zu Ablauf, Technik, Datenschutz und Abschluss.
+
+## Fakten zur Ausbildung
+
+- Dauer: Rund drei Monate mit sechs Sessions.
+- Format: Online, jede Session zwei bis drei Stunden. Zwischen den Sessions arbeitest du an Aufgaben für deinen eigenen Betrieb.
+- Gruppe: Kleingruppe mit höchstens zehn Teilnehmenden.
+- Leitung: Durch die Sessions führt ein Dozent der Ausbildung. Sandro Bischof leitet mit und kümmert sich um Technik und Einrichtung. Stefan Bischof verantwortet die Inhalte.
+- Voraussetzungen: Einen Rechner mit Windows oder macOS, ein eigenes Konto bei Claude, dem KI-Assistenten von Anthropic, mit der Desktop-App, sowie Chrome oder Edge als Browser.
+- Abschluss: Sie schliesst mit einem Umsetzungsprojekt im eigenen Betrieb ab. Sie ist kein staatlich anerkannter Abschluss.
+- Kosten: Die Kosten erfährst du auf Anfrage im Informationsgespräch.
 
 ## Leistungen der swissLean AG
 
@@ -26,3 +36,10 @@ Stand: 11.11.2026. Alle Inhalte auf Deutsch (Schweiz). Zahlen auf den Seiten sin
 
 - [Datenschutz](https://ki-manager-ausbildung.ch/datenschutz/): Welche Daten beim Besuch und bei der Buchung anfallen.
 - [Impressum](https://ki-manager-ausbildung.ch/impressum/): Anbieterin und Kontakt.
+
+## Kontakt
+
+- Anbieterin: swissLean AG, Churerstrasse 88, 8808 Pfäffikon SZ, https://swiss-lean.ch/
+- E-Mail: stefan.bischof@swiss-lean.ch
+- [Infogespräch per Teams buchen](https://bookings.cloud.microsoft/book/Grobanalyse@swiss-lean.ch/s/bb764048-fe34-4ce4-ada8-b9b99915b2b5/)
+- [Infogespräch per Telefon buchen](https://bookings.cloud.microsoft/book/Grobanalyse@swiss-lean.ch/s/b6294d36-11c7-4c50-9d88-4ff55533c0d4/)

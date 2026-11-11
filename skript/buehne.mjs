@@ -6,7 +6,10 @@
 //   Im aktuellen Abschnitt zuerst die acht Bilder ab der Lage in Fahrtrichtung, dann grob vor fein.
 // - Jedes Bild wird mit img.decode() decodiert, bevor es gezeigt wird. Fehlt ein Bild, bleibt das letzte stehen.
 // - Reduzierte Bewegung, Save-Data, 2g oder slow-2g: keine Fahrtbilder, nur Überblendung der Schlüsselbilder.
-//   Auf 3g läuft die Fahrt mit der kleineren Bildstufe.
+//   Auf 3g, bei gemeldeter Bandbreite unter 2 Mbit/s und auf schwachen Geräten läuft die Fahrt als leichte Fahrt
+//   weiter (leichteFahrt): kleinste Bildstufe, jedes zweite Bild, geringere Zeichenauflösung.
+// - Fehlt das Bild an der Zielstelle noch, mischt die Bühne zwischen den nächsten geladenen Bildern davor und danach
+//   (an den Enden mit den Schlüsselbildern) statt stehenzubleiben. Der nächste Abschnitt lädt ab der groben Stufe.
 // - Fehlt ein Abschnitt im Manifest (oder das Manifest ganz): Überblendung der Schlüsselbilder, keine Anfrage.
 // - Die Schlüsselbilder sind die <picture> der Abschnitte (HTML, ohne JavaScript sichtbar); die Bühne zeichnet
 //   deren vom Browser gewählte Datei (currentSrc), lädt also nichts doppelt.
@@ -22,7 +25,7 @@
 //
 // Prüfpunkte für Tests an der Zeichenfläche: data-abschnitt, data-index (-1 = Überblendung), data-bild,
 // data-mischung (Anteil des Nachbarbilds), data-bild2 (Nachbarbild), data-fortschritt,
-// data-geladen (vollständig geladene Abschnitte).
+// data-ueberblendung (Anteil des nächsten Schlüsselbilds), data-zoom, data-leicht, data-geladen (vollständig geladene Abschnitte).
 import { klemme, beiBewegung } from './fortschritt.mjs';
 
 export const REIHE = ['start', 'buero', 'planung', 'werkstatt', 'lager', 'baustelle', 'dienstleistung', 'chefetage'];
@@ -43,6 +46,29 @@ export function langsamesNetz() {
 
 export function knappesNetz() {
   return globalThis.navigator?.connection?.effectiveType === '3g';
+}
+
+// Leichte Fahrt (kein ruhiger Modus, die Fahrt mit Zoom läuft weiter): knappe Leitung (3g oder gemeldete Bandbreite
+// unter 2 Mbit/s) oder schwaches Gerät (gemeldeter Speicher höchstens 4 GB oder höchstens 2 Rechenkerne). Dann lädt
+// die Bühne die kleinste Bildstufe und nur jedes zweite Bild und zeichnet in geringerer Auflösung. Die Kernzahl zählt
+// erst ab 2 abwärts, weil manche Browser auch auf schnellen Handys pauschal 4 melden.
+export const LEICHT_SCHRITT = 2;
+// Sehr knappe Leitung (gemeldete Bandbreite unter 0.7 Mbit/s, aber nicht 2g, das bleibt ruhig): keine Fahrtbilder, die
+// Leitung gehört den Schlüsselbildern. Die Bühne fährt mit einem weichen Zoom auf das aktuelle Schlüsselbild und blendet
+// in das nächste über, sobald es da ist. Der Zoom gilt auch sonst, wenn weder Fahrtbild noch nächstes Schlüsselbild da
+// ist; bei reduzierter Bewegung nie.
+export const SCHLUESSEL_ZOOM = 0.15;
+export function nurSchluesselbilder() {
+  const c = globalThis.navigator?.connection;
+  return !langsamesNetz() && typeof c?.downlink === 'number' && c.downlink > 0 && c.downlink < 0.7;
+}
+export const LEICHT_DICHTE = 1.25;
+export function leichteFahrt() {
+  const n = globalThis.navigator;
+  const c = n?.connection;
+  const netz = knappesNetz() || (typeof c?.downlink === 'number' && c.downlink > 0 && c.downlink < 2);
+  const geraet = (n?.deviceMemory > 0 && n.deviceMemory <= 4) || (n?.hardwareConcurrency > 0 && n.hardwareConcurrency <= 2);
+  return !!(netz || geraet);
 }
 
 export function reduziertGewuenscht() {
@@ -75,16 +101,45 @@ async function ladeManifest(option, wurzel) {
   return { manifest: leseManifest(wurzel), basis: '/bilder/fahrt/' };
 }
 
-export function waehleVariante(abschnitt) {
-  if (abschnitt.hoch && window.matchMedia('(orientation: portrait)').matches) return 'hoch-720';
+// Leichte Fahrt: im Hochformat hoch-480, falls der Abschnitt sie hat (Manifest hochLeicht), quer die kleinste Breite.
+export function waehleVariante(abschnitt, leicht = leichteFahrt()) {
+  if (abschnitt.hoch && window.matchMedia('(orientation: portrait)').matches) return leicht && abschnitt.hochLeicht ? 'hoch-480' : 'hoch-720';
   const noetig = Math.max(window.innerWidth, window.innerHeight * 1.5) * Math.min(window.devicePixelRatio || 1, 2);
   const breiten = [...abschnitt.breiten].sort((a, b) => a - b);
-  if (knappesNetz()) return String(breiten[0]);
+  if (leicht || knappesNetz()) return String(breiten[0]);
   return String(breiten.find((b) => b >= noetig * 0.8) ?? breiten[breiten.length - 1]);
 }
 
-export function fahrtBilder(abschnitt, basis = '/bilder/fahrt/', variante = waehleVariante(abschnitt)) {
-  return Array.from({ length: Math.min(abschnitt.bilder, 90) }, (_, i) => `${basis}${abschnitt.id}/${variante}/${String(i + 1).padStart(3, '0')}.avif`);
+// Bildnummern der Fahrt: jedes, in der leichten Fahrt jedes zweite; das letzte Bild immer, damit die Fahrt an der
+// nächsten Station ankommt.
+export function fahrtNummern(n, schritt = 1) {
+  const r = [];
+  for (let i = 0; i < n; i += schritt) r.push(i);
+  if (r[r.length - 1] !== n - 1) r.push(n - 1);
+  return r;
+}
+
+export function fahrtBilder(abschnitt, basis = '/bilder/fahrt/', variante = waehleVariante(abschnitt), schritt = leichteFahrt() ? LEICHT_SCHRITT : 1) {
+  return fahrtNummern(Math.min(abschnitt.bilder, 90), schritt).map((i) => `${basis}${abschnitt.id}/${variante}/${String(i + 1).padStart(3, '0')}.avif`);
+}
+
+// Ohne passendes Bild an der Zielstelle: die nächsten geladenen Bilder davor (lo) und danach (hi), Anteil t von hi.
+// Fehlt eines davon, gilt das Schlüsselbild der Station davor als Bild 0 und das der Station danach als letztes Bild
+// (vorhanden(-1) und vorhanden(n)). So mischt die Bühne immer zwischen dem, was schon da ist, und steht nie still.
+export function umgebung(ziel, n, vorhanden) {
+  let lo = Math.min(Math.floor(ziel), n - 1);
+  while (lo >= 0 && !vorhanden(lo)) lo--;
+  let hi = Math.max(Math.ceil(ziel), 0);
+  while (hi < n && !vorhanden(hi)) hi++;
+  if (lo < 0 && vorhanden(-1)) lo = -1;
+  else if (lo < 0) lo = null;
+  if (hi >= n && vorhanden(n)) hi = n;
+  else if (hi >= n) hi = null;
+  if (lo === null && hi === null) return null;
+  if (lo === null || hi === null || lo === hi) return { lo: lo ?? hi, hi: lo ?? hi, t: 0 };
+  const posLo = Math.max(lo, 0);
+  const posHi = Math.min(hi, n - 1);
+  return { lo, hi, t: posHi > posLo ? Math.min(1, Math.max(0, (ziel - posLo) / (posHi - posLo))) : 0 };
 }
 
 // Lage zwischen zwei Fahrtbildern: unteres Bild i0, oberes i1, Anteil t von i1 (0 bis unter 1).
@@ -157,14 +212,15 @@ export function ladeReihenfolge(n, ab = null, richtung = 1) {
 }
 
 // Zeichnet das Bild deckend (wie object-fit: cover, mittig). Mit rahmen nur in diesem Rechteck (Gerätepixel).
-export function zeichneDeckend(ctx, bild, alpha = 1, rahmen = null) {
+// zoom über 1 vergrössert mittig (Fahrt ohne Fahrtbilder).
+export function zeichneDeckend(ctx, bild, alpha = 1, rahmen = null, zoom = 1) {
   const cw = ctx.canvas.width;
   const ch = ctx.canvas.height;
   const iw = bild.naturalWidth;
   const ih = bild.naturalHeight;
   if (!iw || !ih || !cw || !ch) return false;
   const r = rahmen ?? { x: 0, y: 0, w: cw, h: ch };
-  const s = Math.max(r.w / iw, r.h / ih);
+  const s = Math.max(r.w / iw, r.h / ih) * zoom;
   const w = iw * s;
   const h = ih * s;
   ctx.globalAlpha = alpha;
@@ -183,6 +239,8 @@ export function zeichneDeckend(ctx, bild, alpha = 1, rahmen = null) {
 export function starteBuehne(wurzel, optionen = {}) {
   const html = document.documentElement;
   const reduziert = optionen.reduziert ?? reduziertGewuenscht();
+  const leicht = !reduziert && (optionen.leicht ?? leichteFahrt());
+  const nurSchluessel = !reduziert && (optionen.nurSchluessel ?? nurSchluesselbilder());
   const stationen = REIHE.map((id) => document.getElementById(id));
   if (stationen.some((s) => !s)) return { stoppe() {} };
 
@@ -196,6 +254,8 @@ export function starteBuehne(wurzel, optionen = {}) {
   const ctx = canvas.getContext('2d', { alpha: false });
   html.classList.add('buehne-an');
   html.classList.toggle('buehne-ruhig', reduziert);
+  if (nurSchluessel) canvas.dataset.leicht = 'schluessel';
+  else if (leicht) canvas.dataset.leicht = 'ja';
 
   let manifest = null;
   let basis = '/bilder/fahrt/';
@@ -251,9 +311,12 @@ export function starteBuehne(wurzel, optionen = {}) {
   const anteil = (k, p) => (k === LETZTE ? FINALE_VORLAUF * klemme(p) : klemme(p));
   const bildAus = (e, i) => e.bilder[i] || e.ersatz?.[i] || null;
 
+  // Zeichenauflösung: höchstens doppelte Pixeldichte, in der leichten Fahrt LEICHT_DICHTE (die kleine Bildstufe hat
+  // ohnehin nicht mehr Pixel, und jedes Bild kostet auf schwachen Geräten weniger Zeichenarbeit).
+  const dichte = () => Math.min(window.devicePixelRatio || 1, leicht ? LEICHT_DICHTE : 2);
   function miss() {
-    const breite = Math.round(canvas.clientWidth * Math.min(window.devicePixelRatio || 1, 2));
-    const hoehe = Math.round(canvas.clientHeight * Math.min(window.devicePixelRatio || 1, 2));
+    const breite = Math.round(canvas.clientWidth * dichte());
+    const hoehe = Math.round(canvas.clientHeight * dichte());
     if (canvas.width !== breite || canvas.height !== hoehe) {
       canvas.width = breite;
       canvas.height = hoehe;
@@ -294,15 +357,17 @@ export function starteBuehne(wurzel, optionen = {}) {
 
   function ladeAbschnitt(k) {
     const a = abschnittFuer(k);
-    if (!a || reduziert || cache.has(a.id)) return;
-    const variante = waehleVariante(a);
-    const urls = fahrtBilder(a, basis, variante);
+    if (!a || reduziert || nurSchluessel || cache.has(a.id)) return;
+    const variante = waehleVariante(a, leicht);
+    const urls = fahrtBilder(a, basis, variante, leicht ? LEICHT_SCHRITT : 1);
     const eintrag = {
       variante,
       urls,
       bilder: new Array(urls.length).fill(null),
       ersatz: ersatz.get(a.id) ?? null,
       fertig: false,
+      grob: false,
+      erledigt: 0,
       abgebrochen: false,
       fehler: 0,
       laufend: new Set(),
@@ -314,6 +379,9 @@ export function starteBuehne(wurzel, optionen = {}) {
     if (jetzt.k === k) ab = Math.floor(anteil(k, jetzt.p) * (urls.length - 1));
     else if (k < jetzt.k) ab = urls.length - 1; // rückwärts betritt man den Abschnitt an seinem Ende
     const folge = ladeReihenfolge(urls.length, ab, jetzt.k === k ? richtung : k < jetzt.k ? -1 : 1);
+    // Grobe Stufe: die acht Bilder ab der Lage plus jedes vierte. Danach darf der nächste Abschnitt schon laden
+    // (gestaffelt), während hier die Zwischenbilder folgen; die Bühne mischt bis dahin zwischen den groben Bildern.
+    const grobGrenze = Math.min(folge.length, 8 + Math.ceil(urls.length / 4));
     let naechster = 0;
     let offen = 0;
     const weiter = () => {
@@ -345,6 +413,10 @@ export function starteBuehne(wurzel, optionen = {}) {
         ).finally(() => {
           eintrag.laufend.delete(img);
           offen--;
+          if (!eintrag.grob && ++eintrag.erledigt >= grobGrenze && !eintrag.abgebrochen) {
+            eintrag.grob = true;
+            nachladen();
+          }
           weiter();
         });
       }
@@ -363,8 +435,8 @@ export function starteBuehne(wurzel, optionen = {}) {
     canvas.dataset.geladen = [...cache].filter(([, e]) => e.fertig && e.fehler < e.urls.length).map(([id]) => id).join(',');
   }
 
-  // Nur der aktuelle und der nächste Abschnitt in Fahrtrichtung bleiben im Speicher; geladen wird der Nachbar
-  // erst nach dem aktuellen.
+  // Nur der aktuelle und der nächste Abschnitt in Fahrtrichtung bleiben im Speicher; geladen wird der Nachbar,
+  // sobald der aktuelle seine grobe Stufe hat (gestaffelt, nicht erst ganz am Ende).
   function nachladen() {
     if (gestoppt || !manifest || reduziert) return;
     const { k } = lage();
@@ -380,7 +452,7 @@ export function starteBuehne(wurzel, optionen = {}) {
     meldeGeladen();
     const aktuell = abschnittFuer(k);
     if (aktuell && !cache.has(aktuell.id)) ladeAbschnitt(k);
-    else if (!aktuell || cache.get(aktuell.id)?.fertig) ladeAbschnitt(nachbar);
+    else if (!aktuell || cache.get(aktuell.id)?.fertig || cache.get(aktuell.id)?.grob) ladeAbschnitt(nachbar);
   }
 
   // Passt die geladene Variante nicht mehr zur Fenstergrösse, wird der Abschnitt neu geladen. Die bisherigen
@@ -390,7 +462,7 @@ export function starteBuehne(wurzel, optionen = {}) {
     let geaendert = false;
     for (const [id, e] of cache) {
       const a = manifest.abschnitte.find((x) => x.id === id);
-      if (!a || waehleVariante(a) === e.variante) continue;
+      if (!a || waehleVariante(a, leicht) === e.variante) continue;
       verwirf(e);
       cache.delete(id);
       const alt = e.bilder.map((b, i) => b || e.ersatz?.[i] || null);
@@ -402,14 +474,6 @@ export function starteBuehne(wurzel, optionen = {}) {
       letzterZustand = '';
       plan.plane();
     }
-  }
-
-  function naechstesBild(eintrag, ziel) {
-    for (let d = 0; d < eintrag.bilder.length; d++) {
-      if (bildAus(eintrag, ziel - d)) return ziel - d;
-      if (bildAus(eintrag, ziel + d)) return ziel + d;
-    }
-    return -1;
   }
 
   // Am Anfang der ersten Fahrt: Rechteck, in dem die Bühne zeichnet. Bei q = 0 genau die Lage des Startbilds im
@@ -460,14 +524,25 @@ export function starteBuehne(wurzel, optionen = {}) {
           t = m.t;
         }
       } else {
-        // Noch nicht alles geladen (grob vor fein): nächstes vorhandenes Bild ohne Mischung.
-        index = naechstesBild(eintrag, Math.round(f * (eintrag.urls.length - 1)));
-        if (index >= 0) haupt = bildAus(eintrag, index);
+        // Noch nicht alles geladen (grob vor fein): zwischen den nächsten geladenen Bildern davor und danach mischen,
+        // an den Enden mit den Schlüsselbildern der Stationen. Ein fehlendes Bild hält die Fahrt so nie an.
+        const n = eintrag.urls.length;
+        const schl = (i) => (i < 0 ? (bereit.has(a) ? a : null) : i >= n ? (b && bereit.has(b) ? b : null) : bildAus(eintrag, i));
+        const u = umgebung(f * (n - 1), n, (i) => !!schl(i));
+        if (u) {
+          index = u.lo >= 0 && u.lo < n ? u.lo : -1;
+          haupt = schl(u.lo);
+          if (u.t > 0 && u.hi !== u.lo) {
+            neben = schl(u.hi);
+            t = u.t;
+          }
+        }
       }
     }
     const rahmen = startRahmen(k, q);
     const id = idFuer(k);
-    const zustand = `${id}|${index}|${haupt?.src ?? ''}|${neben ? 1 : 0}|${q.toFixed(3)}|${bereit.has(a)}|${b ? bereit.has(b) : ''}|${canvas.width}x${canvas.height}|${rahmen ? Math.round(rahmen.y) : ''}`;
+    // Mischpartner und Anteil gehören dazu: kommt ein fehlendes Bild an, wechselt nur der Partner, nicht die Lage.
+    const zustand = `${id}|${index}|${haupt?.src ?? ''}|${neben?.src ?? ''}|${t.toFixed(3)}|${q.toFixed(3)}|${bereit.has(a)}|${b ? bereit.has(b) : ''}|${canvas.width}x${canvas.height}|${rahmen ? Math.round(rahmen.y) : ''}`;
     if (zustand === letzterZustand) return;
     // Im Startrahmen bleibt Fläche frei: dort Grund, aber nur wenn danach wirklich ein Bild gezeichnet wird
     // (der Rahmen besteht nur am Anfang der ersten Fahrt, gezeichnet wird dann das Fahrtbild oder das Startbild).
@@ -477,9 +552,11 @@ export function starteBuehne(wurzel, optionen = {}) {
     }
     let gezeichnet = false;
     let quelle = '';
+    let ueber = 0; // Anteil des nächsten Schlüsselbilds in der Überblendung (data-ueberblendung)
+    let zoom = 1; // Zoom auf das aktuelle Schlüsselbild ohne Fahrtbilder (data-zoom)
     if (haupt) {
       gezeichnet = zeichneDeckend(ctx, haupt, 1, rahmen);
-      quelle = haupt.src;
+      quelle = haupt.currentSrc || haupt.src;
       if (neben) zeichneDeckend(ctx, neben, t, rahmen);
       const alphaA = klemme(1 - q / RAND);
       const alphaB = klemme((q - (1 - RAND)) / RAND);
@@ -490,15 +567,18 @@ export function starteBuehne(wurzel, optionen = {}) {
       const aOk = bereit.has(a);
       const bOk = !!b && bereit.has(b);
       if (aOk && (q < 1 || !bOk)) {
-        gezeichnet = zeichneDeckend(ctx, a, 1, rahmen);
+        zoom = reduziert ? 1 : 1 + SCHLUESSEL_ZOOM * q;
+        gezeichnet = zeichneDeckend(ctx, a, 1, rahmen, zoom);
         quelle = a.currentSrc || a.src;
         if (bOk && q > 0) {
           zeichneDeckend(ctx, b, q, rahmen);
+          ueber = q;
           if (q >= 0.5) quelle = b.currentSrc || b.src;
         }
       } else if (bOk && q >= 0.5) {
         gezeichnet = zeichneDeckend(ctx, b, 1, rahmen);
         quelle = b.currentSrc || b.src;
+        ueber = 1;
       }
     }
     if (!gezeichnet) return; // nichts Fertiges: letztes Bild bleibt stehen, kein Flackern
@@ -507,8 +587,10 @@ export function starteBuehne(wurzel, optionen = {}) {
     canvas.dataset.index = String(index);
     canvas.dataset.bild = quelle.replace(location.origin, '');
     canvas.dataset.mischung = t.toFixed(3);
-    canvas.dataset.bild2 = neben ? neben.src.replace(location.origin, '') : '';
+    canvas.dataset.bild2 = neben ? (neben.currentSrc || neben.src).replace(location.origin, '') : '';
     canvas.dataset.fortschritt = q.toFixed(3);
+    canvas.dataset.ueberblendung = ueber.toFixed(3);
+    canvas.dataset.zoom = zoom.toFixed(3);
     // Das Startbild im HTML blendet erst aus, wenn die Bühne an seiner Stelle dasselbe zeigt.
     setzeStartDeckung(k === 0 ? klemme(1 - q / RAND).toFixed(3) : '0');
     if (!html.classList.contains('buehne-bereit')) html.classList.add('buehne-bereit');

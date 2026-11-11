@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'; child-src 'none'; manifest-src 'none'">
-<title>Aufbau, Inhalte und Ablauf der KI-Manager-Ausbildung</title>
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>KI-Manager-Ausbildung für Schweizer KMU: Aufbau und Ablauf</title>
 <meta name="description" content="Sechs Sessions in rund drei Monaten, online in einer Kleingruppe: So ist die KI-Manager-Ausbildung aufgebaut, das lernst du, und diese Leute begleiten dich.">
 <link rel="canonical" href="https://ki-manager-ausbildung.ch/ausbildung/">
 <meta property="og:type" content="website">
@@ -13,13 +14,15 @@
 <meta property="og:title" content="So läuft die KI-Manager-Ausbildung">
 <meta property="og:description" content="Sechs Sessions in rund drei Monaten, online in einer Kleingruppe: So ist die KI-Manager-Ausbildung aufgebaut, das lernst du, und diese Leute begleiten dich.">
 <meta property="og:url" content="https://ki-manager-ausbildung.ch/ausbildung/">
-<meta property="og:image" content="https://ki-manager-ausbildung.ch/bilder/leistungen/og-ki-ausbildung.jpg">
+<meta property="og:image" content="https://ki-manager-ausbildung.ch/bilder/leistungen/og-ki-ausbildung-2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Architekturmodell eines Schulungsraums im Schnitt mit langem Tisch, Laptops und einem Bildschirm, dazu der Titel KI-Manager-Ausbildung und der Satz: Jemand aus deinem Team baut eigene KI-Werkzeuge.">
+<meta property="og:image:alt" content="Logo der swissLean AG über dem Titel KI-Manager-Ausbildung, darunter das Leistungsbild. Architekturmodell eines Schulungsraums im Schnitt mit langem Tisch, Laptops und einem Bildschirm.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="/icon-512.png" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/schrift/montserrat-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/schrift/sourcesans-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/stil/basis.css">
@@ -39,6 +42,13 @@
         "height": 162
       },
       "email": "stefan.bischof@swiss-lean.ch",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Infogespräch und Kontakt",
+        "email": "stefan.bischof@swiss-lean.ch",
+        "availableLanguage": "de",
+        "areaServed": "CH"
+      },
       "vatID": "CHE-327.394.130 MWST",
       "identifier": {
         "@type": "PropertyValue",
@@ -60,7 +70,7 @@
       "@type": "WebPage",
       "@id": "https://ki-manager-ausbildung.ch/ausbildung/#seite",
       "url": "https://ki-manager-ausbildung.ch/ausbildung/",
-      "name": "Aufbau, Inhalte und Ablauf der KI-Manager-Ausbildung",
+      "name": "KI-Manager-Ausbildung für Schweizer KMU: Aufbau und Ablauf",
       "description": "Sechs Sessions in rund drei Monaten, online in einer Kleingruppe: So ist die KI-Manager-Ausbildung aufgebaut, das lernst du, und diese Leute begleiten dich.",
       "inLanguage": "de-CH",
       "dateModified": "2026-11-11",
@@ -72,12 +82,23 @@
     },
     {
       "@type": "Course",
+      "@id": "https://ki-manager-ausbildung.ch/ausbildung/#kurs",
       "name": "KI-Manager-Ausbildung",
       "description": "Praxisausbildung der swissLean AG für Schweizer KMU: In rund drei Monaten und sechs Online-Sessions baust du eigene KI-Werkzeuge und KI-Agenten für die Abläufe deines Betriebs und setzt sie sicher ein.",
+      "url": "https://ki-manager-ausbildung.ch/ausbildung/",
       "provider": {
         "@type": "Organization",
         "@id": "https://ki-manager-ausbildung.ch/#organisation",
         "name": "swissLean AG"
+      },
+      "inLanguage": "de-CH",
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": "online",
+        "courseWorkload": "Sechs Sessions zu je zwei bis drei Stunden, dazwischen Aufgaben für den eigenen Betrieb",
+        "duration": "P3M",
+        "maximumAttendeeCapacity": 10,
+        "inLanguage": "de-CH"
       }
     },
     {
@@ -94,7 +115,10 @@
       "timeToComplete": "P3M",
       "educationalProgramMode": "online",
       "maximumEnrollment": 10,
-      "inLanguage": "de-CH"
+      "inLanguage": "de-CH",
+      "hasCourse": {
+        "@id": "https://ki-manager-ausbildung.ch/ausbildung/#kurs"
+      }
     },
     {
       "@type": "Person",
@@ -105,7 +129,8 @@
         "@type": "Organization",
         "@id": "https://ki-manager-ausbildung.ch/#organisation",
         "name": "swissLean AG"
-      }
+      },
+      "image": "https://ki-manager-ausbildung.ch/bilder/personen/stefan-bischof-240.webp"
     },
     {
       "@type": "Person",
@@ -116,7 +141,8 @@
         "@type": "Organization",
         "@id": "https://ki-manager-ausbildung.ch/#organisation",
         "name": "swissLean AG"
-      }
+      },
+      "image": "https://ki-manager-ausbildung.ch/bilder/personen/sandro-bischof-240.webp"
     },
     {
       "@type": "BreadcrumbList",

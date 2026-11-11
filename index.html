@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'; child-src 'none'; manifest-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>KI-Manager-Ausbildung für Schweizer KMU | swissLean AG</title>
 <meta name="description" content="Von der Anfrage bis zur Schlussrechnung: Sieh, wo KI deinem Betrieb Zeit zurückgibt, und bau in der KI-Manager-Ausbildung dein KI-Betriebssystem.">
 <link rel="canonical" href="https://ki-manager-ausbildung.ch/">
@@ -13,13 +14,15 @@
 <meta property="og:title" content="KI-Manager-Ausbildung für Schweizer KMU">
 <meta property="og:description" content="Von der Anfrage bis zur Schlussrechnung: Sieh, wo KI deinem Betrieb Zeit zurückgibt, und bau in der KI-Manager-Ausbildung dein KI-Betriebssystem.">
 <meta property="og:url" content="https://ki-manager-ausbildung.ch/">
-<meta property="og:image" content="https://ki-manager-ausbildung.ch/bilder/og.jpg">
+<meta property="og:image" content="https://ki-manager-ausbildung.ch/bilder/og-2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Gebäude bei Nacht mit erleuchteten Fenstern, dazu der Satz: In jedem Stockwerk deines Betriebs steckt Zeit, die KI dir zurückgeben kann.">
+<meta property="og:image:alt" content="Logo der swissLean AG und der Schriftzug KI-Manager-Ausbildung auf dunklem Grund, links und rechts Gebäude bei Nacht mit rot erleuchteten Fenstern.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="/icon-512.png" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/schrift/montserrat-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/schrift/sourcesans-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/stil/basis.css">
@@ -42,6 +45,13 @@
         "height": 162
       },
       "email": "stefan.bischof@swiss-lean.ch",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Infogespräch und Kontakt",
+        "email": "stefan.bischof@swiss-lean.ch",
+        "availableLanguage": "de",
+        "areaServed": "CH"
+      },
       "vatID": "CHE-327.394.130 MWST",
       "identifier": {
         "@type": "PropertyValue",
@@ -74,16 +84,6 @@
       }
     },
     {
-      "@type": "Course",
-      "name": "KI-Manager-Ausbildung",
-      "description": "Praxisausbildung der swissLean AG für Schweizer KMU: In rund drei Monaten und sechs Online-Sessions baust du eigene KI-Werkzeuge und KI-Agenten für die Abläufe deines Betriebs und setzt sie sicher ein.",
-      "provider": {
-        "@type": "Organization",
-        "@id": "https://ki-manager-ausbildung.ch/#organisation",
-        "name": "swissLean AG"
-      }
-    },
-    {
       "@type": "EducationalOccupationalProgram",
       "@id": "https://ki-manager-ausbildung.ch/ausbildung/#programm",
       "name": "KI-Manager-Ausbildung",
@@ -97,7 +97,10 @@
       "timeToComplete": "P3M",
       "educationalProgramMode": "online",
       "maximumEnrollment": 10,
-      "inLanguage": "de-CH"
+      "inLanguage": "de-CH",
+      "hasCourse": {
+        "@id": "https://ki-manager-ausbildung.ch/ausbildung/#kurs"
+      }
     },
     {
       "@type": "Person",
@@ -108,7 +111,8 @@
         "@type": "Organization",
         "@id": "https://ki-manager-ausbildung.ch/#organisation",
         "name": "swissLean AG"
-      }
+      },
+      "image": "https://ki-manager-ausbildung.ch/bilder/personen/stefan-bischof-240.webp"
     },
     {
       "@type": "Person",
@@ -119,7 +123,8 @@
         "@type": "Organization",
         "@id": "https://ki-manager-ausbildung.ch/#organisation",
         "name": "swissLean AG"
-      }
+      },
+      "image": "https://ki-manager-ausbildung.ch/bilder/personen/sandro-bischof-240.webp"
     }
   ]
 }
@@ -184,7 +189,7 @@
   </svg>
 </nav>
 
-<main id="inhalt" data-fahrt="{&quot;fassung&quot;:1,&quot;abschnitte&quot;:[{&quot;id&quot;:&quot;start-buero&quot;,&quot;von&quot;:&quot;start&quot;,&quot;nach&quot;:&quot;buero&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true},{&quot;id&quot;:&quot;buero-planung&quot;,&quot;von&quot;:&quot;buero&quot;,&quot;nach&quot;:&quot;planung&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true},{&quot;id&quot;:&quot;planung-werkstatt&quot;,&quot;von&quot;:&quot;planung&quot;,&quot;nach&quot;:&quot;werkstatt&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true},{&quot;id&quot;:&quot;werkstatt-lager&quot;,&quot;von&quot;:&quot;werkstatt&quot;,&quot;nach&quot;:&quot;lager&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true},{&quot;id&quot;:&quot;lager-baustelle&quot;,&quot;von&quot;:&quot;lager&quot;,&quot;nach&quot;:&quot;baustelle&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true},{&quot;id&quot;:&quot;baustelle-dienstleistung&quot;,&quot;von&quot;:&quot;baustelle&quot;,&quot;nach&quot;:&quot;dienstleistung&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true},{&quot;id&quot;:&quot;dienstleistung-chefetage&quot;,&quot;von&quot;:&quot;dienstleistung&quot;,&quot;nach&quot;:&quot;chefetage&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true},{&quot;id&quot;:&quot;chefetage-finale&quot;,&quot;von&quot;:&quot;chefetage&quot;,&quot;nach&quot;:&quot;finale&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true}]}">
+<main id="inhalt" data-fahrt="{&quot;fassung&quot;:1,&quot;abschnitte&quot;:[{&quot;id&quot;:&quot;start-buero&quot;,&quot;von&quot;:&quot;start&quot;,&quot;nach&quot;:&quot;buero&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true,&quot;hochLeicht&quot;:true},{&quot;id&quot;:&quot;buero-planung&quot;,&quot;von&quot;:&quot;buero&quot;,&quot;nach&quot;:&quot;planung&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true,&quot;hochLeicht&quot;:true},{&quot;id&quot;:&quot;planung-werkstatt&quot;,&quot;von&quot;:&quot;planung&quot;,&quot;nach&quot;:&quot;werkstatt&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true,&quot;hochLeicht&quot;:true},{&quot;id&quot;:&quot;werkstatt-lager&quot;,&quot;von&quot;:&quot;werkstatt&quot;,&quot;nach&quot;:&quot;lager&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true,&quot;hochLeicht&quot;:true},{&quot;id&quot;:&quot;lager-baustelle&quot;,&quot;von&quot;:&quot;lager&quot;,&quot;nach&quot;:&quot;baustelle&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true,&quot;hochLeicht&quot;:true},{&quot;id&quot;:&quot;baustelle-dienstleistung&quot;,&quot;von&quot;:&quot;baustelle&quot;,&quot;nach&quot;:&quot;dienstleistung&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true,&quot;hochLeicht&quot;:true},{&quot;id&quot;:&quot;dienstleistung-chefetage&quot;,&quot;von&quot;:&quot;dienstleistung&quot;,&quot;nach&quot;:&quot;chefetage&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true,&quot;hochLeicht&quot;:true},{&quot;id&quot;:&quot;chefetage-finale&quot;,&quot;von&quot;:&quot;chefetage&quot;,&quot;nach&quot;:&quot;finale&quot;,&quot;bilder&quot;:60,&quot;breiten&quot;:[960,1600],&quot;hoch&quot;:true,&quot;hochLeicht&quot;:true}]}">
 
   <section id="start" class="hero" aria-labelledby="start-titel">
     <div class="ebenen" aria-hidden="true">
@@ -192,7 +197,7 @@
         <source media="(orientation: portrait)" type="image/avif" srcset="/bilder/stationen/start-hoch-720.avif 720w, /bilder/stationen/start-hoch-1080.avif 1080w" sizes="98vw" width="1080" height="1620">
         <source type="image/avif" srcset="/bilder/stationen/start-480.avif 480w, /bilder/stationen/start-960.avif 960w, /bilder/stationen/start-1600.avif 1600w" sizes="100vw">
         <source type="image/webp" srcset="/bilder/stationen/start-480.webp 480w, /bilder/stationen/start-960.webp 960w, /bilder/stationen/start-1600.webp 1600w" sizes="100vw">
-        <img src="/bilder/stationen/start-960.webp" width="2400" height="1600" alt="" fetchpriority="high" decoding="async">
+        <img src="/bilder/stationen/start-960.webp" width="2400" height="1600" alt="Visualisierung eines Betriebsgebäudes bei Nacht: Bürotrakt aus Holz und Glas mit erleuchteten Stockwerken, daneben eine Produktionshalle mit offenem Tor und einem Lastwagen." fetchpriority="high" decoding="async">
       </picture>
     </div>
     <div class="rahmen hero-text">
@@ -243,7 +248,7 @@
         <source media="(orientation: portrait)" type="image/avif" srcset="/bilder/stationen/buero-hoch-720.avif 720w, /bilder/stationen/buero-hoch-1080.avif 1080w" sizes="100vw" width="1080" height="1620">
         <source type="image/avif" srcset="/bilder/stationen/buero-960.avif 960w, /bilder/stationen/buero-1600.avif 1600w, /bilder/stationen/buero-2400.avif 2400w" sizes="100vw">
         <source type="image/webp" srcset="/bilder/stationen/buero-960.webp 960w, /bilder/stationen/buero-1600.webp 1600w, /bilder/stationen/buero-2400.webp 2400w" sizes="100vw">
-        <img src="/bilder/stationen/buero-960.webp" width="2400" height="1600" alt="" loading="lazy" decoding="async">
+        <img src="/bilder/stationen/buero-960.webp" width="2400" height="1600" alt="Visualisierung des Büros: Arbeitsplatz mit Holztisch, Bildschirm und Schreibtischlampe, durch die Glasfront der Blick auf den nächtlichen Werkhof." loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="halt" data-halt="buero">
@@ -268,7 +273,7 @@
         <source media="(orientation: portrait)" type="image/avif" srcset="/bilder/stationen/planung-hoch-720.avif 720w, /bilder/stationen/planung-hoch-1080.avif 1080w" sizes="100vw" width="1080" height="1620">
         <source type="image/avif" srcset="/bilder/stationen/planung-960.avif 960w, /bilder/stationen/planung-1600.avif 1600w, /bilder/stationen/planung-2400.avif 2400w" sizes="100vw">
         <source type="image/webp" srcset="/bilder/stationen/planung-960.webp 960w, /bilder/stationen/planung-1600.webp 1600w, /bilder/stationen/planung-2400.webp 2400w" sizes="100vw">
-        <img src="/bilder/stationen/planung-960.webp" width="2400" height="1600" alt="" loading="lazy" decoding="async">
+        <img src="/bilder/stationen/planung-960.webp" width="2400" height="1600" alt="Visualisierung des Planungsraums: Besprechungstisch mit ausgerollten Bauplänen, an der Wand ein Bildschirm mit einem Ablaufschema, dahinter die Produktionshalle." loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="halt" data-halt="planung">
@@ -293,7 +298,7 @@
         <source media="(orientation: portrait)" type="image/avif" srcset="/bilder/stationen/werkstatt-hoch-720.avif 720w, /bilder/stationen/werkstatt-hoch-1080.avif 1080w" sizes="100vw" width="1080" height="1620">
         <source type="image/avif" srcset="/bilder/stationen/werkstatt-960.avif 960w, /bilder/stationen/werkstatt-1600.avif 1600w, /bilder/stationen/werkstatt-2400.avif 2400w" sizes="100vw">
         <source type="image/webp" srcset="/bilder/stationen/werkstatt-960.webp 960w, /bilder/stationen/werkstatt-1600.webp 1600w, /bilder/stationen/werkstatt-2400.webp 2400w" sizes="100vw">
-        <img src="/bilder/stationen/werkstatt-960.webp" width="2400" height="1600" alt="" loading="lazy" decoding="async">
+        <img src="/bilder/stationen/werkstatt-960.webp" width="2400" height="1600" alt="Visualisierung der Werkstatt: Halle mit Holzbalkendecke, Bearbeitungsmaschinen mit Bedienfeldern und ein Schweissroboter." loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="halt" data-halt="werkstatt">
@@ -318,7 +323,7 @@
         <source media="(orientation: portrait)" type="image/avif" srcset="/bilder/stationen/lager-hoch-720.avif 720w, /bilder/stationen/lager-hoch-1080.avif 1080w" sizes="100vw" width="1080" height="1620">
         <source type="image/avif" srcset="/bilder/stationen/lager-960.avif 960w, /bilder/stationen/lager-1600.avif 1600w, /bilder/stationen/lager-2400.avif 2400w" sizes="100vw">
         <source type="image/webp" srcset="/bilder/stationen/lager-960.webp 960w, /bilder/stationen/lager-1600.webp 1600w, /bilder/stationen/lager-2400.webp 2400w" sizes="100vw">
-        <img src="/bilder/stationen/lager-960.webp" width="2400" height="1600" alt="" loading="lazy" decoding="async">
+        <img src="/bilder/stationen/lager-960.webp" width="2400" height="1600" alt="Visualisierung des Lagers: Hochregale mit Holz und verpackter Ware, ein Stapler, durch das offene Tor ein Lastwagen mit Kran." loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="halt" data-halt="lager">
@@ -341,7 +346,7 @@
         <source media="(orientation: portrait)" type="image/avif" srcset="/bilder/stationen/baustelle-hoch-720.avif 720w, /bilder/stationen/baustelle-hoch-1080.avif 1080w" sizes="100vw" width="1080" height="1620">
         <source type="image/avif" srcset="/bilder/stationen/baustelle-960.avif 960w, /bilder/stationen/baustelle-1600.avif 1600w, /bilder/stationen/baustelle-2400.avif 2400w" sizes="100vw">
         <source type="image/webp" srcset="/bilder/stationen/baustelle-960.webp 960w, /bilder/stationen/baustelle-1600.webp 1600w, /bilder/stationen/baustelle-2400.webp 2400w" sizes="100vw">
-        <img src="/bilder/stationen/baustelle-960.webp" width="2400" height="1600" alt="" loading="lazy" decoding="async">
+        <img src="/bilder/stationen/baustelle-960.webp" width="2400" height="1600" alt="Visualisierung einer Baustelle bei Nacht: Ein Kranlastwagen hebt ein Holzrahmenelement, zwei Personen montieren es auf dem Rohbau, vorne ein Tablet auf einem Werktisch." loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="halt" data-halt="baustelle">
@@ -366,7 +371,7 @@
         <source media="(orientation: portrait)" type="image/avif" srcset="/bilder/stationen/dienstleistung-hoch-720.avif 720w, /bilder/stationen/dienstleistung-hoch-1080.avif 1080w" sizes="100vw" width="1080" height="1620">
         <source type="image/avif" srcset="/bilder/stationen/dienstleistung-960.avif 960w, /bilder/stationen/dienstleistung-1600.avif 1600w, /bilder/stationen/dienstleistung-2400.avif 2400w" sizes="100vw">
         <source type="image/webp" srcset="/bilder/stationen/dienstleistung-960.webp 960w, /bilder/stationen/dienstleistung-1600.webp 1600w, /bilder/stationen/dienstleistung-2400.webp 2400w" sizes="100vw">
-        <img src="/bilder/stationen/dienstleistung-960.webp" width="2400" height="1600" alt="" loading="lazy" decoding="async">
+        <img src="/bilder/stationen/dienstleistung-960.webp" width="2400" height="1600" alt="Visualisierung eines Serviceeinsatzes: Ein Techniker kniet an einer Wärmepumpe, daneben ein Tablet und ein offener Werkzeugkoffer, draussen ein Servicewagen." loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="halt" data-halt="dienstleistung">
@@ -391,7 +396,7 @@
         <source media="(orientation: portrait)" type="image/avif" srcset="/bilder/stationen/chefetage-hoch-720.avif 720w, /bilder/stationen/chefetage-hoch-1080.avif 1080w" sizes="100vw" width="1080" height="1620">
         <source type="image/avif" srcset="/bilder/stationen/chefetage-960.avif 960w, /bilder/stationen/chefetage-1600.avif 1600w, /bilder/stationen/chefetage-2400.avif 2400w" sizes="100vw">
         <source type="image/webp" srcset="/bilder/stationen/chefetage-960.webp 960w, /bilder/stationen/chefetage-1600.webp 1600w, /bilder/stationen/chefetage-2400.webp 2400w" sizes="100vw">
-        <img src="/bilder/stationen/chefetage-960.webp" width="2400" height="1600" alt="" loading="lazy" decoding="async">
+        <img src="/bilder/stationen/chefetage-960.webp" width="2400" height="1600" alt="Visualisierung der Chefetage: grosser Holztisch mit Bildschirm vor einer Glasfront, Blick auf den Werkhof und die Berge bei Nacht." loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="halt" data-halt="chefetage">
@@ -829,7 +834,7 @@
         <source media="(orientation: portrait)" type="image/avif" srcset="/bilder/stationen/finale-hoch-720.avif 720w, /bilder/stationen/finale-hoch-1080.avif 1080w" sizes="100vw" width="1080" height="1620">
         <source type="image/avif" srcset="/bilder/stationen/finale-960.avif 960w, /bilder/stationen/finale-1600.avif 1600w, /bilder/stationen/finale-2400.avif 2400w" sizes="100vw">
         <source type="image/webp" srcset="/bilder/stationen/finale-960.webp 960w, /bilder/stationen/finale-1600.webp 1600w, /bilder/stationen/finale-2400.webp 2400w" sizes="100vw">
-        <img class="finale-poster" src="/bilder/stationen/finale-960.webp" width="2400" height="1600" alt="" loading="lazy" decoding="async">
+        <img class="finale-poster" src="/bilder/stationen/finale-960.webp" width="2400" height="1600" alt="Visualisierung des ganzen Betriebsgebäudes bei Nacht: alle Stockwerke erleuchtet, auf den Bildschirmen dieselbe orange Oberfläche." loading="lazy" decoding="async">
       </picture>
       <canvas class="finale-flaeche"></canvas>
     </div>
@@ -960,6 +965,8 @@
       "description": "Im Zusammenschnitt erzählen Teilnehmende aus drei Betrieben, was sie selbst gebaut haben und was sich dadurch in ihrem Alltag verändert hat.",
       "thumbnailUrl": "https://ki-manager-ausbildung.ch/videos/finale-zusammenschnitt.avif",
       "contentUrl": "https://ki-manager-ausbildung.ch/videos/finale-zusammenschnitt.mp4",
+      "url": "https://vimeo.com/1231205354/b776e763f3",
+      "transcript": "AI ist für mich wie ein Zauberstab. Wenn wir uns mit der Magie auseinandersetzen, uns in das ganze Thema einlesen, bringt uns das Stück Holz zu unendlicher Magie. Wenn wir das aber nicht machen, ist es ein simples Stück Holz. Ich habe verschiedenste Tools schon bauen können. Es sind Leitstände, die ich gemacht habe, wo die Tools alle verwaltet werden. Wir haben Lieferschein-Tools gemacht, die automatisch Lieferscheine generieren für diverse Sachen. Ich habe Cockpits gemacht, wo man auf Knopfdruck sieht, wie geht es der Unternehmung, sind wir auf Kurs oder sind wir nicht auf Kurs? Wir haben Bestelltools gemacht, dass den Projektleitern Bestellungen einfacher fallen. Wir haben ein ganzes Projektleiter-Cockpit gemacht, wo man Termine, Kontakte und die ganzen Adressen verwaltet von unseren Baustellen, die wir gerade haben. Vor der KI habe ich in der Buchhaltung in der Regel zwei bis zweieinhalb Tage investiert. Im Geschäft bin ich jetzt auf einem Tag und Thema Planung ist es meistens ein Tag gewesen in der Woche. Zusammengerechnet bin ich jetzt etwa schon auf einem halben Tag.",
       "uploadDate": "2026-09-29T12:00:00+02:00",
       "duration": "PT1M10S",
       "inLanguage": "de-CH",
@@ -976,6 +983,7 @@
       "description": "Ein Hersteller von Trennwänden für Büros und Produktion hat sich mit KI ein Ausschreibungswerkzeug erstellen lassen, das die Unterlagen liest und mit den eigenen Bedingungen vergleicht.",
       "thumbnailUrl": "https://ki-manager-ausbildung.ch/videos/planung-trewag.avif",
       "contentUrl": "https://ki-manager-ausbildung.ch/videos/planung-trewag.mp4",
+      "url": "https://vimeo.com/1236470859/32f929dfd7",
       "uploadDate": "2026-10-16T12:00:00+02:00",
       "duration": "PT1M20S",
       "inLanguage": "de-CH",
@@ -992,6 +1000,8 @@
       "description": "Jede Woche müssen die Lieferungen der Folgewoche auf die Gruppen verteilt werden. Was früher über Excel-Listen und Kalender von Hand lief, steckt heute in einer eigenen Maske.",
       "thumbnailUrl": "https://ki-manager-ausbildung.ch/videos/werkstatt-pe-fabrikation.avif",
       "contentUrl": "https://ki-manager-ausbildung.ch/videos/werkstatt-pe-fabrikation.mp4",
+      "url": "https://vimeo.com/1226947697/7551938b51",
+      "transcript": "Das Beispiel, wo und wie ich am meisten Zeit sparen kann mit meinen Tools, ist unser Auslastungsprogramm, wo wir wissen oder mitbekommen, bis Ende der Woche, was in der Folgewoche geliefert wird. Und das müssen wir terminieren in die verschiedenen Gruppen, mit welchem Team macht was. Das Ganze ist jede Woche ein repetitiver Prozess und haben wir immer von Hand machen müssen. Excel-Listen terminieren, Kalender einführen, Excel-Listen terminieren, Kalender einführen. Das Ganze ist jetzt in einer Maske, in einer Dashboard-Maske, wo ich nur noch das Excel hochlade. Es findet die Termine, es macht sie mir zuweisbar in die Gruppe und ich habe den Arbeitsprozess, den ich bis vor diesen Tools fünf bis sechs Stunden gehabt habe, auf 20 Minuten reduziert. Die KI-Manager-Ausbildung bei der swissLean würde ich absolut weiterempfehlen. Habe ich auch schon bereits an gewisse Kollegen oder Arbeitskollegen, die mich gefragt haben, woher habe ich das Wissen, die mich begleitet haben in dieser Zeit, wo ich den Kurs machen durfte, die verstanden haben oder bei mir gesehen haben, was ich jetzt fähig bin zu machen.",
       "uploadDate": "2026-09-15T12:00:00+02:00",
       "duration": "PT1M15S",
       "inLanguage": "de-CH",
@@ -1008,6 +1018,8 @@
       "description": "Für einen Kunden, für den der Betrieb regelmässig die gleichen Produkte herstellt, ist ein eigenes Lagerwerkzeug entstanden. Später soll es auch in Produktion und Montage helfen.",
       "thumbnailUrl": "https://ki-manager-ausbildung.ch/videos/lager-tschabold.avif",
       "contentUrl": "https://ki-manager-ausbildung.ch/videos/lager-tschabold.mp4",
+      "url": "https://vimeo.com/1236497420/a43fee7d35",
+      "transcript": "Ein Tool, das ich bis jetzt gebaut habe, ist für einen Kunden, für den wir regelmässig Produkte herstellen. Das sind immer wieder die gleichen. Da habe ich ein Lagertool gebaut, damit ich auf einen Blick sehe, was wir am Lager haben. Wenn eine Bestellung reinkommt, kann ich das in das Tool schiessen. Dann sieht man im Tool: „Das und das ist am Lager, diese Teile musst du bestellen.“ Und dann stellt es daraus auch gleich Produktionspläne auf plus eine Versandliste für die Oberfläche. Früher habe ich dafür ein paar Stunden aufgewendet, jetzt kann ich es mit einem Klick erledigen. Mein Aha-Moment in der KI-Ausbildung war, dass eigentlich nichts unmöglich ist. Man hat immer wieder zusammengehockt und gezeigt, was man für Tools gebaut hat. Da sind mir die Augen aufgegangen, dass fast alles, was man im Sinn hat, machbar ist. Tools, die ich noch bauen möchte: Zurzeit habe ich einfach Tools für mich, die mir den Alltag erleichtern. Aber ich werde das sicher später einmal auf die ganze Bude erweitern, damit es auch in der Produktion und auf der Montage hilft, damit die Mitarbeiter auf einen Blick sehen, was sie zu tun haben.",
       "uploadDate": "2026-10-16T12:00:00+02:00",
       "duration": "PT1M5S",
       "inLanguage": "de-CH",
@@ -1024,6 +1036,7 @@
       "description": "Vor jedem Einsatz bekommt der Mitarbeiter ein A4-Blatt mit den wichtigsten Angaben aus allen Mails. Dazu kommt ein E-Mail-Agent, der wie ein Sekretär nebenan arbeitet.",
       "thumbnailUrl": "https://ki-manager-ausbildung.ch/videos/baustelle-tschenett.avif",
       "contentUrl": "https://ki-manager-ausbildung.ch/videos/baustelle-tschenett.mp4",
+      "transcript": "Ein Beispiel ist, ich habe so ein Tool gebaut, das ein Baustellenblatt erzeugt. Also sprich, auf einem A4-Blatt für den Mitarbeiter die wichtigsten Informationen aus allen Mails, Informationen, die wir hineinschreiben und so weiter herausholt. Auf Knopfdruck wird das erzeugt und das kann ich dann an den Mitarbeiter abgeben. Das ist jetzt eine Sache von einer Minute, dauert das jetzt für mich und früher hat das geschätzt eine halbe Stunde, bis ich alles durchgelesen habe, alles auf den Wort geschrieben habe, ein bisschen formatiert und so weiter. Und das ist schon eine Zeitersparnis. Und was ich jetzt fast am meisten brauche im Moment, ist wirklich auch ein E-Mail-Agent. Das ist für mich ist das immer wie ein Sekretär, der neben mir steht. Ich erkläre ihm schnell, was meistens mit Diktat oder Sprachaufnahme und erkläre ihm, was er machen soll, was er für eine E-Mail machen soll oder auch gewisse Sachen von einer E-Mail irgendwo ablegen und er macht das dann. Und das Coole ist, der Agent kennt unsere Aufträge. Also er weiss genau, was haben wir schon besprochen, was ist in diesen Objekten alles schon abgelegt, was für Informationen und so weiter und hat natürlich immer den richtigen Bezug wieder.",
       "uploadDate": "2026-09-28T12:00:00+02:00",
       "duration": "PT1M27S",
       "inLanguage": "de-CH",
@@ -1040,6 +1053,7 @@
       "description": "Ein Betrieb aus Fahrzeugbau, Carrosserie und Spritzwerk hat zuerst die wiederkehrende Arbeit abgegeben, die viel Zeit frisst und nichts einbringt. Seit dem Video spart der Betrieb in der Buchhaltung nochmals einen halben Tag.",
       "thumbnailUrl": "https://ki-manager-ausbildung.ch/videos/buero-freuler.avif",
       "contentUrl": "https://ki-manager-ausbildung.ch/videos/buero-freuler.mp4",
+      "url": "https://vimeo.com/1230943689/cc99add4f1",
       "uploadDate": "2026-09-28T12:00:00+02:00",
       "duration": "PT1M13S",
       "inLanguage": "de-CH",
@@ -1056,6 +1070,8 @@
       "description": "Seit der Betrieb eigene KI-Werkzeuge baut, laufen die Prozesse strukturierter, und die Projektleiter bekommen Unterstützung bei ihren Abläufen.",
       "thumbnailUrl": "https://ki-manager-ausbildung.ch/videos/chefetage-bachofer.avif",
       "contentUrl": "https://ki-manager-ausbildung.ch/videos/chefetage-bachofer.mp4",
+      "url": "https://vimeo.com/1229877215/33729c7c71",
+      "transcript": "Ich habe verschiedenste Tools schon bauen können. Es sind Leitstände, die ich gemacht habe, wo die Tools alle verwaltet werden. Wir haben Lieferschein-Tools gemacht, die automatisch Lieferscheine generieren für diverse Sachen. Wir haben Bestelltools gemacht, dass dem Projektleiter Bestellungen einfacher fallen. Wir haben ein ganzes Projektleiter-Cockpit gemacht, wo man Termine, Kontakte und die ganzen Adressen unserer Baustellen verwaltet. Seit ich KI-Tools baue, haben wir gemerkt, dass unsere Prozesse strukturierter laufen, dass ich meine Projektleiter vor allem auch unter die Arme greifen kann, um gewisse Abläufe einfacher und effizienter zu machen. Es ist relativ schwierig, eine genaue Zeit zu definieren, wo man schneller ist, aber ich denke, es sind sicher 20% bis 30% drin. Man muss auch immer schauen, dass die Tools genau auf das abgeschnitten sind, was man auch braucht. Manchmal verliert man sich ein wenig im Toolbau, weil es halt doch relativ weit geht. Mein Aha-Moment in der Ausbildung war, zu erleben, was heute überhaupt möglich ist.",
       "uploadDate": "2026-09-24T12:00:00+02:00",
       "duration": "PT1M11S",
       "inLanguage": "de-CH",
@@ -1072,6 +1088,8 @@
       "description": "Kollegen haben immer wieder nachgefragt, was er macht und wie. Seine Antwort: Die Ausbildung öffnet eine Tür in eine Welt, die gerade wächst.",
       "thumbnailUrl": "https://ki-manager-ausbildung.ch/videos/wand-pe-empfehlung.avif",
       "contentUrl": "https://ki-manager-ausbildung.ch/videos/wand-pe-empfehlung.mp4",
+      "url": "https://vimeo.com/1226947697/7551938b51",
+      "transcript": "Die haben immer gerade nachgefragt: Was mache ich? Wie mache ich? Und wo mache ich das? Darum würde ich den Kurs für alle empfehlen, vom einfachen Handwerker, der für sich privat etwas gerne nutzen will, bis zum Geschäftsleiter, der Geschäftsprozesse optimieren möchte, finde ich den Kurs absolut sinnvoll, weil er eine Türe aufmacht in ein System, in eine Welt, die neben uns am Gebären ist und wächst. Jemand, der zögert, den Kurs zu machen, würde ich versuchen, mit Beispielen zu überzeugen. Was habe ich gemacht? Ich würde vielleicht nachfragen, was ist heute Morgen das erste Problem, das er geschäftlich vor sich gehabt hat und könnte ihm vielleicht eine Idee geben, wie man das mit AI angehen kann.",
       "uploadDate": "2026-09-15T12:00:00+02:00",
       "duration": "PT50S",
       "inLanguage": "de-CH",
