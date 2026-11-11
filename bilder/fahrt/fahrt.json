@@ -10,8 +10,7 @@
         960,
         1600
       ],
-      "hoch": true,
-      "hochLeicht": true
+      "hoch": true
     },
     {
       "id": "buero-planung",
@@ -22,8 +21,7 @@
         960,
         1600
       ],
-      "hoch": true,
-      "hochLeicht": true
+      "hoch": true
     },
     {
       "id": "planung-werkstatt",
@@ -34,8 +32,7 @@
         960,
         1600
       ],
-      "hoch": true,
-      "hochLeicht": true
+      "hoch": true
     },
     {
       "id": "werkstatt-lager",
@@ -46,8 +43,7 @@
         960,
         1600
       ],
-      "hoch": true,
-      "hochLeicht": true
+      "hoch": true
     },
     {
       "id": "lager-baustelle",
@@ -58,8 +54,7 @@
         960,
         1600
       ],
-      "hoch": true,
-      "hochLeicht": true
+      "hoch": true
     },
     {
       "id": "baustelle-dienstleistung",
@@ -70,8 +65,7 @@
         960,
         1600
       ],
-      "hoch": true,
-      "hochLeicht": true
+      "hoch": true
     },
     {
       "id": "dienstleistung-chefetage",
@@ -82,8 +76,7 @@
         960,
         1600
       ],
-      "hoch": true,
-      "hochLeicht": true
+      "hoch": true
     },
     {
       "id": "chefetage-finale",
@@ -94,8 +87,7 @@
         960,
         1600
       ],
-      "hoch": true,
-      "hochLeicht": true
+      "hoch": true
     }
   ]
 }
