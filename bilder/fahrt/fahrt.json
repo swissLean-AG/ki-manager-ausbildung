@@ -1,0 +1,93 @@
+{
+  "fassung": 1,
+  "abschnitte": [
+    {
+      "id": "start-buero",
+      "von": "start",
+      "nach": "buero",
+      "bilder": 60,
+      "breiten": [
+        960,
+        1600
+      ],
+      "hoch": true
+    },
+    {
+      "id": "buero-planung",
+      "von": "buero",
+      "nach": "planung",
+      "bilder": 60,
+      "breiten": [
+        960,
+        1600
+      ],
+      "hoch": true
+    },
+    {
+      "id": "planung-werkstatt",
+      "von": "planung",
+      "nach": "werkstatt",
+      "bilder": 60,
+      "breiten": [
+        960,
+        1600
+      ],
+      "hoch": true
+    },
+    {
+      "id": "werkstatt-lager",
+      "von": "werkstatt",
+      "nach": "lager",
+      "bilder": 60,
+      "breiten": [
+        960,
+        1600
+      ],
+      "hoch": true
+    },
+    {
+      "id": "lager-baustelle",
+      "von": "lager",
+      "nach": "baustelle",
+      "bilder": 60,
+      "breiten": [
+        960,
+        1600
+      ],
+      "hoch": true
+    },
+    {
+      "id": "baustelle-dienstleistung",
+      "von": "baustelle",
+      "nach": "dienstleistung",
+      "bilder": 60,
+      "breiten": [
+        960,
+        1600
+      ],
+      "hoch": true
+    },
+    {
+      "id": "dienstleistung-chefetage",
+      "von": "dienstleistung",
+      "nach": "chefetage",
+      "bilder": 60,
+      "breiten": [
+        960,
+        1600
+      ],
+      "hoch": true
+    },
+    {
+      "id": "chefetage-finale",
+      "von": "chefetage",
+      "nach": "finale",
+      "bilder": 60,
+      "breiten": [
+        960,
+        1600
+      ],
+      "hoch": true
+    }
+  ]
+}

@@ -1,0 +1,201 @@
+/* Menü und Fuss, später Teil: Tafel der Leistungen, offenes Menü auf dem Handy, Leistungen im Fuss.
+   Wird am Ende des Körpers geladen. Beim Laden ist das Menü zu und der Fuss weit unten, deshalb ohne Layoutsprung.
+   Den sichtbaren Teil des Kopfs regelt basis.css. */
+
+/* Offenes Menü auf dem Handy: im Fluss, volle Breite */
+.menue-liste > li {
+  border-bottom: 1px solid var(--linie);
+}
+
+.menue-panel {
+  padding: 0.25rem 0 1rem;
+}
+
+.menue-leistungen {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.menue-leistungen a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 52px;
+  padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.menue-leistungen img {
+  flex: none;
+  width: 4.5rem;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  background: var(--menue-grund);
+}
+
+.menue-leistungen a:hover,
+.menue-leistungen a[aria-current='page'] {
+  color: var(--akzent-hell);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.menue-alle {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+.menue-alle::after,
+.alle-link a::after,
+.pfeil-links a::after {
+  content: '';
+  width: 0.45em;
+  height: 0.45em;
+  margin-left: 0.55em;
+  border-right: 2px solid currentColor;
+  border-top: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.menue-buchen-handy {
+  padding: 0.75rem 0;
+  border-bottom: 0 !important;
+}
+
+.menue-buchen-handy .knopf {
+  width: 100%;
+}
+
+/* Breiter Bildschirm: Leistungen als helle Tafel unter dem Kopf */
+@media (min-width: 64rem) {
+  @supports selector(::details-content) {
+    .menue-liste > li {
+      border: 0;
+    }
+
+    .menue-panel {
+      position: absolute;
+      top: calc(100% - 0.25rem);
+      right: var(--rand);
+      width: min(62rem, calc(100% - 2 * var(--rand)));
+      padding: 1.25rem;
+      background: var(--menue-grund);
+      color: var(--menue-text);
+      border-radius: 14px;
+      box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.45);
+      animation: tafel-ein 0.3s var(--kurve);
+    }
+
+    .menue-leistungen {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.25rem;
+    }
+
+    .menue-leistungen a {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.25rem;
+      padding: 0.375rem 0.375rem 0.75rem;
+      color: var(--menue-text);
+      font-family: var(--schrift-titel);
+      font-size: 0.9375rem;
+      transition: background-color 0.2s var(--kurve);
+    }
+
+    .menue-leistungen img {
+      width: 100%;
+      border-radius: 8px;
+      transition: transform 0.3s var(--kurve);
+    }
+
+    .menue-leistungen a:hover,
+    .menue-leistungen a:focus-visible,
+    .menue-leistungen a[aria-current='page'] {
+      color: var(--menue-akzent);
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .menue-leistungen a:hover img,
+    .menue-leistungen a:focus-visible img {
+      transform: translateY(-3px);
+    }
+
+    .menue-panel :focus-visible {
+      outline-color: var(--menue-akzent);
+    }
+
+    .menue-alle {
+      margin: 0.75rem 0.375rem 0;
+      color: var(--menue-akzent);
+    }
+  }
+}
+
+@keyframes tafel-ein {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+}
+
+/* Fuss: Leistungen als eigene Spalte */
+.fuss-spalte {
+  flex: 1 1 18rem;
+}
+
+.fuss-titel {
+  margin: 0 0 0.25rem;
+  font-family: var(--schrift-titel);
+  font-weight: 700;
+}
+
+.fuss-titel a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text);
+}
+
+.fuss-leistungen {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0 1.25rem;
+  margin: 0;
+  padding: 0;
+}
+
+.fuss-leistungen a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.fuss .fuss-links {
+  flex: 1 1 100%;
+  border-top: 1px solid var(--linie);
+  padding-top: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menue-panel {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .menue-knopf,
+  .menue-panel {
+    border: 1px solid CanvasText;
+  }
+}

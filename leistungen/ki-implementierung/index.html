@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'; child-src 'none'; manifest-src 'none'">
+<title>KI-Implementierung im KMU: vom Pilot in den Alltag</title>
+<meta name="description" content="Die swissLean AG baut mit dir eine KI-Plattform auf den Daten deines Betriebs, testet sie an echten Fällen und übergibt sie so, dass dein Team weiterarbeitet.">
+<link rel="canonical" href="https://ki-manager-ausbildung.ch/leistungen/ki-implementierung/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="KI-Manager-Ausbildung">
+<meta property="og:locale" content="de_CH">
+<meta property="og:title" content="KI-Implementierung: vom Pilot in den Alltag deines Betriebs.">
+<meta property="og:description" content="Die swissLean AG baut mit dir eine KI-Plattform auf den Daten deines Betriebs, testet sie an echten Fällen und übergibt sie so, dass dein Team weiterarbeitet.">
+<meta property="og:url" content="https://ki-manager-ausbildung.ch/leistungen/ki-implementierung/">
+<meta property="og:image" content="https://ki-manager-ausbildung.ch/bilder/leistungen/og-ki-implementierung.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Architekturmodell eines Bürogeschosses im Schnitt: In der Mitte leuchtet ein gläserner Raum rot, Linien führen zu den Arbeitsplätzen.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/schrift/montserrat-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/schrift/sourcesans-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/stil/basis.css">
+<link rel="stylesheet" href="/stil/leistungen.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://ki-manager-ausbildung.ch/#organisation",
+      "name": "swissLean AG",
+      "url": "https://swiss-lean.ch/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://ki-manager-ausbildung.ch/bilder/swisslean-logo.png",
+        "width": 608,
+        "height": 162
+      },
+      "email": "stefan.bischof@swiss-lean.ch",
+      "vatID": "CHE-327.394.130 MWST",
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "UID",
+        "value": "CHE-327.394.130"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/swisslean"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Churerstrasse 88",
+        "postalCode": "8808",
+        "addressLocality": "Pfäffikon SZ",
+        "addressCountry": "CH"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://ki-manager-ausbildung.ch/leistungen/ki-implementierung/#seite",
+      "url": "https://ki-manager-ausbildung.ch/leistungen/ki-implementierung/",
+      "name": "KI-Implementierung im KMU: vom Pilot in den Alltag",
+      "description": "Die swissLean AG baut mit dir eine KI-Plattform auf den Daten deines Betriebs, testet sie an echten Fällen und übergibt sie so, dass dein Team weiterarbeitet.",
+      "inLanguage": "de-CH",
+      "dateModified": "2026-11-11",
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://ki-manager-ausbildung.ch/#organisation",
+        "name": "swissLean AG"
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://ki-manager-ausbildung.ch/leistungen/ki-implementierung/#leistung",
+      "name": "KI-Implementierung",
+      "serviceType": "KI-Implementierung",
+      "description": "Bei der KI-Implementierung baut die swissLean AG mit dir eine KI-Plattform auf den eigenen Daten deines Betriebs, zum Beispiel auf früheren Offerten und Kalkulationen. Sie ist für KMU, die KI im Alltag nutzen wollen, ohne selbst jemanden dafür auszubilden. In rund drei Monaten läuft ein erster Ablauf an echten Fällen, und dein Team arbeitet damit weiter.",
+      "url": "https://ki-manager-ausbildung.ch/leistungen/ki-implementierung/",
+      "image": "https://ki-manager-ausbildung.ch/bilder/leistungen/og-ki-implementierung.jpg",
+      "provider": {
+        "@type": "Organization",
+        "@id": "https://ki-manager-ausbildung.ch/#organisation",
+        "name": "swissLean AG"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Schweiz"
+      },
+      "audience": {
+        "@type": "BusinessAudience",
+        "name": "KMU in der Schweiz"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://ki-manager-ausbildung.ch/leistungen/ki-implementierung/#fragen",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Müssen wir viel investieren, bevor wir wissen, ob es etwas bringt?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nein. Wir beginnen mit einem Live-Test an einem echten Fall und danach mit einem Leuchtturmprojekt an wenigen echten Fällen."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Ich will den konkreten Mehrwert sehen, bevor ich entscheide.",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Darum steht am Anfang ein Test mit euren eigenen Daten, nicht eine Präsentation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Dürfen wir Kunden- und Vertragsdaten mit KI verarbeiten?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Das klären wir vor dem Start. Über die kommerzielle Schnittstelle werden Inhalte standardmässig nicht zum Training verwendet, und an das Sprachmodell gehen nur die Auszüge, die eine Anfrage braucht."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wo liegen unsere Daten?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Das System und die Ablage laufen bei euch, das Sprachmodell rechnet in der Cloud."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Gehört uns, was gebaut wird?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja. Alles wird dokumentiert und übergeben."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wer arbeitet bei uns mit?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Die Fachleute, die den Ablauf heute machen. Sie prüfen jedes Ergebnis, ihr Feedback verbessert das System."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Bauen wir das selbst oder ihr?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Beides geht. In der KI-Manager-Ausbildung lernt jemand aus deinem Team, es selbst zu bauen. Bei der KI-Implementierung bauen wir es mit dir."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Was kostet eine KI-Implementierung?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Die Kosten erfährst du auf Anfrage im Informationsgespräch."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Startseite",
+          "item": "https://ki-manager-ausbildung.ch/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Leistungen",
+          "item": "https://ki-manager-ausbildung.ch/leistungen/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "KI-Implementierung",
+          "item": "https://ki-manager-ausbildung.ch/leistungen/ki-implementierung/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<script type="module" src="/skript/rahmen.mjs"></script>
+<script type="module" src="/skript/menue.mjs"></script>
+<script type="module" src="/skript/leistungen.mjs"></script>
+</head>
+<body class="seite-leistung">
+<a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+
+<header class="kopf">
+  <a class="marke" href="/"><picture class="marke-logo"><source media="(max-width: 30em)" srcset="/bilder/marke/swisslean-bildmarke-weiss-25.webp 1x, /bilder/marke/swisslean-bildmarke-weiss-50.webp 2x, /bilder/marke/swisslean-bildmarke-weiss-75.webp 3x" width="25" height="28"><img src="/bilder/marke/swisslean-logo-weiss-137.webp" srcset="/bilder/marke/swisslean-logo-weiss-137.webp 1x, /bilder/marke/swisslean-logo-weiss-274.webp 2x, /bilder/marke/swisslean-logo-weiss-411.webp 3x" width="137" height="28" alt="swissLean" decoding="async"></picture><span class="marke-text">KI-Manager-<span>Ausbildung</span></span></a>
+  <nav class="menue" aria-label="Hauptmenü">
+    <details class="menue-klapp">
+      <summary class="menue-knopf"><span class="menue-symbol" aria-hidden="true"></span><span class="menue-text">Menü</span></summary>
+      <ul class="menue-liste">
+        <li><a class="menue-link" href="/ausbildung/">Ausbildung</a></li>
+        <li class="menue-unter-platz">
+          <details class="menue-unter">
+            <summary class="menue-link aktiv">Leistungen</summary>
+            <div class="menue-panel">
+              <ul class="menue-leistungen">
+            <li><a href="/leistungen/prozessanalyse/"><img src="/bilder/leistungen/prozessanalyse-480.avif" width="480" height="270" alt="" loading="lazy" decoding="async"><span>Prozessanalyse</span></a></li>
+            <li><a href="/leistungen/lean-management/"><img src="/bilder/leistungen/lean-management-480.avif" width="480" height="270" alt="" loading="lazy" decoding="async"><span>Lean Management</span></a></li>
+            <li><a href="/leistungen/automatisierung/"><img src="/bilder/leistungen/automatisierung-480.avif" width="480" height="270" alt="" loading="lazy" decoding="async"><span>Automatisierung</span></a></li>
+            <li><a href="/ausbildung/"><img src="/bilder/leistungen/ki-ausbildung-480.avif" width="480" height="270" alt="" loading="lazy" decoding="async"><span>KI-Ausbildung</span></a></li>
+            <li><a href="/leistungen/ki-implementierung/" aria-current="page"><img src="/bilder/leistungen/ki-implementierung-480.avif" width="480" height="270" alt="" loading="lazy" decoding="async"><span>KI-Implementierung</span></a></li>
+            <li><a href="/leistungen/ki-betriebssystem/"><img src="/bilder/leistungen/ki-betriebssystem-480.avif" width="480" height="270" alt="" loading="lazy" decoding="async"><span>KI-Betriebssystem</span></a></li>
+            <li><a href="/leistungen/digitale-transformation/"><img src="/bilder/leistungen/digitale-transformation-480.avif" width="480" height="270" alt="" loading="lazy" decoding="async"><span>Digitale Transformation</span></a></li>
+            <li><a href="/leistungen/strategische-beratung/"><img src="/bilder/leistungen/strategische-beratung-480.avif" width="480" height="270" alt="" loading="lazy" decoding="async"><span>Strategische Beratung</span></a></li>
+              </ul>
+              <a class="menue-alle" href="/leistungen/">Alle Leistungen im Überblick</a>
+            </div>
+          </details>
+        </li>
+        <li><a class="menue-link" href="/fragen/">Fragen</a></li>
+        <li class="menue-buchen-handy"><a class="knopf" href="#gespraech">Infogespräch buchen</a></li>
+      </ul>
+    </details>
+  </nav>
+  <a class="knopf knopf-klein menue-buchen" href="#gespraech">Infogespräch buchen</a>
+</header>
+
+<main id="inhalt">
+
+  <div class="leistung-kopf hell">
+    <div class="rahmen leistung-kopf-raster">
+      <nav class="brotkrumen" aria-label="Brotkrumen">
+        <ol>
+          <li><a href="/">Startseite</a></li>
+          <li><a href="/leistungen/">Leistungen</a></li>
+          <li><span aria-current="page">KI-Implementierung</span></li>
+        </ol>
+      </nav>
+      <figure class="leistung-bild">
+        <img src="/bilder/leistungen/ki-implementierung-1200.avif" srcset="/bilder/leistungen/ki-implementierung-480.avif 480w, /bilder/leistungen/ki-implementierung-800.avif 800w, /bilder/leistungen/ki-implementierung-1200.avif 1200w, /bilder/leistungen/ki-implementierung-1600.avif 1600w, /bilder/leistungen/ki-implementierung-2000.avif 2000w, /bilder/leistungen/ki-implementierung-2400.avif 2400w" sizes="(min-width: 64rem) 58vw, 100vw" width="2400" height="1350" alt="Architekturmodell eines Bürogeschosses im Schnitt: In der Mitte leuchtet ein gläserner Raum rot, Linien führen zu den Arbeitsplätzen." fetchpriority="high" decoding="async">
+      </figure>
+      <div class="leistung-kopf-text">
+        <p class="dachzeile">Leistung der swissLean AG</p>
+        <h1><span class="ganz">KI-Implementierung:</span> vom Pilot in den Alltag deines Betriebs.</h1>
+        <p class="antwort">Bei der KI-Implementierung baut die swissLean AG mit dir eine KI-Plattform auf den eigenen Daten deines Betriebs, zum Beispiel auf früheren Offerten und Kalkulationen. Sie ist für KMU, die KI im Alltag nutzen wollen, ohne selbst jemanden dafür auszubilden. In rund drei Monaten läuft ein erster Ablauf an echten Fällen, und dein Team arbeitet damit weiter.</p>
+        <div class="knopfreihe">
+          <a class="knopf" href="#gespraech">Infogespräch buchen</a>
+          <a class="knopf knopf-hell" href="#ablauf">So läuft es ab</a>
+        </div>
+        <p class="stand">Stand: <time datetime="2026-11-11">11.11.2026</time></p>
+      </div>
+    </div>
+  </div>
+
+  <section id="nutzen" class="hell-abschnitt" aria-labelledby="nutzen-titel">
+    <div class="rahmen">
+      <h2 id="nutzen-titel">Was dir eine <span class="ganz">KI-Implementierung</span> bringt</h2>
+      <ul class="karten" role="list">
+        <li class="karte einblenden"><h3>Offerten in Minuten statt Stunden</h3><p>Das Ziel: neue Offerten KI-gestützt erstellen, auf der Grundlage aller früheren Offerten und Kalkulationen.</p></li>
+        <li class="karte einblenden"><h3>Mit deinem ERP verbunden</h3><p>Die Plattform verbindet sich direkt mit dem bestehenden Branchen-ERP, mit Export und Import.</p></li>
+        <li class="karte einblenden"><h3>Deine Daten bleiben bei dir</h3><p>Ablage und System laufen bei dir. Das Sprachmodell rechnet in der Cloud und bekommt nur die Auszüge, die eine Anfrage braucht.</p></li>
+        <li class="karte einblenden"><h3>Es gehört dir</h3><p>Alles, was gebaut wird, ist dokumentiert und wird übergeben.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="ablauf" class="hell-abschnitt hell-abschnitt-zwei" aria-labelledby="ablauf-titel">
+    <div class="rahmen">
+      <h2 id="ablauf-titel">So läuft es ab</h2>
+      <ol class="schrittgrafik schrittgrafik-kurz">
+        <li class="schritt einblenden"><h3 class="schritt-titel">Einstieg mit Live-Test</h3><p>Analyse mit dem Büroteam und ein Test mit einer echten Offerte aus deinem Alltag.</p></li>
+        <li class="schritt einblenden"><h3 class="schritt-titel">Monat eins: Plattform aufbauen</h3><p>Daten aus dem ERP erschliessen, Lieferantenkataloge einlesen, den Import absichern und die Plattform einrichten.</p></li>
+        <li class="schritt einblenden"><h3 class="schritt-titel">Monat zwei: Leuchtturmprojekt</h3><p>Fünf bis acht echte Fälle KI-gestützt bearbeiten. Die Fachleute prüfen jedes Ergebnis, ihr Feedback verbessert das System.</p></li>
+        <li class="schritt einblenden"><h3 class="schritt-titel">Monat drei: Auswertung und Ausblick</h3><p>Vorher-Nachher-Auswertung, Datenqualität, eine Übersicht für Werkstatt oder Büro und eine Roadmap für die nächsten Schritte.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="ergebnis" class="hell-abschnitt" aria-labelledby="ergebnis-titel">
+    <div class="rahmen zwei-spalten">
+      <div>
+        <h2 id="ergebnis-titel">Was du danach in der Hand hast</h2>
+        <ul class="haken">
+        <li>Eine eigene KI-Plattform mit euren früheren Daten als Wissensbasis</li>
+        <li>Ein Ablauf, der im Alltag funktioniert</li>
+        <li>Die Anbindung an euer ERP</li>
+        <li>Eine Projektübersicht und ein klares Bild der nächsten Schritte</li>
+        <li>Monatliche Statusmeetings, Support per Mail und Teams und eine Dokumentation</li>
+        </ul>
+      </div>
+      <div id="fuer-wen" class="fuer-wen">
+        <h2>Für wen</h2>
+        <p>Für Betriebe, die viel Wissen in alten Offerten, Kalkulationen und Projekten haben und KI nutzen wollen, ohne selbst jemanden auszubilden. Die Begleitung läuft vor Ort oder remote.</p>
+        <ul class="liste-hell">
+        <li>Die Fachleute, die den Ablauf heute machen, arbeiten mit und prüfen jedes Ergebnis.</li>
+        <li>Wer später selbst weiterbauen will, schickt eine Person in die KI-Manager-Ausbildung.</li>
+        <li>Den Rahmen klären wir im Infogespräch.</li>
+        </ul>
+        <p class="selbst-bauen">Selbst bauen statt bauen lassen? In der <a href="/ausbildung/">KI-Manager-Ausbildung</a> lernt jemand aus deinem Team, eigene KI-Werkzeuge zu bauen.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="praxis" class="hell-abschnitt hell-abschnitt-zwei" aria-labelledby="praxis-titel">
+    <div class="rahmen">
+      <h2 id="praxis-titel">Belegt aus der Praxis</h2>
+      <ul class="belege" role="list">
+        <li class="beleg einblenden"><p class="beleg-wert">Bis zu 3.5 Stunden</p><p class="beleg-text">brauchte ein Betrieb aus Heizung, Sanitär und Spenglerei mit rund 20 Mitarbeitenden bis dahin pro Offerte. Im Live-Test wurde eine KI-erzeugte Offerte erfolgreich in sein ERP importiert.</p><p class="beleg-quelle">Quelle: Ausgangslage eines Kundenprojekts, ohne Namen, kein Ergebnis</p></li>
+        <li class="beleg einblenden"><p class="beleg-wert">5 bis 8</p><p class="beleg-text">echte Fälle bearbeitet das Team im Leuchtturmprojekt mit KI, bevor ausgewertet wird.</p><p class="beleg-quelle">Quelle: Ablauf des Plattformmandats der swissLean AG</p></li>
+        <li class="beleg einblenden"><p class="beleg-wert">Etwa 1 Stunde</p><p class="beleg-text">statt fünf bis sechs Stunden braucht ein Teilnehmer der KI-Manager-Ausbildung heute für eine Ausschreibung, mit einem Werkzeug, das er selbst gebaut hat.</p><p class="beleg-quelle">Quelle: Beispiel aus der KI-Manager-Ausbildung, eigene Angabe im Video</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="fragen" class="hell-abschnitt" aria-labelledby="fragen-titel">
+    <div class="rahmen rahmen-schmal">
+      <h2 id="fragen-titel">Fragen und Antworten: <span class="ganz">KI-Implementierung</span></h2>
+      <details>
+        <summary>Müssen wir viel investieren, bevor wir wissen, ob es etwas bringt?</summary>
+        <p>Nein. Wir beginnen mit einem Live-Test an einem echten Fall und danach mit einem Leuchtturmprojekt an wenigen echten Fällen.</p>
+      </details>
+      <details>
+        <summary>Ich will den konkreten Mehrwert sehen, bevor ich entscheide.</summary>
+        <p>Darum steht am Anfang ein Test mit euren eigenen Daten, nicht eine Präsentation.</p>
+      </details>
+      <details>
+        <summary>Dürfen wir Kunden- und Vertragsdaten mit KI verarbeiten?</summary>
+        <p>Das klären wir vor dem Start. Über die kommerzielle Schnittstelle werden Inhalte standardmässig nicht zum Training verwendet, und an das Sprachmodell gehen nur die Auszüge, die eine Anfrage braucht.</p>
+      </details>
+      <details>
+        <summary>Wo liegen unsere Daten?</summary>
+        <p>Das System und die Ablage laufen bei euch, das Sprachmodell rechnet in der Cloud.</p>
+      </details>
+      <details>
+        <summary>Gehört uns, was gebaut wird?</summary>
+        <p>Ja. Alles wird dokumentiert und übergeben.</p>
+      </details>
+      <details>
+        <summary>Wer arbeitet bei uns mit?</summary>
+        <p>Die Fachleute, die den Ablauf heute machen. Sie prüfen jedes Ergebnis, ihr Feedback verbessert das System.</p>
+      </details>
+      <details>
+        <summary>Bauen wir das selbst oder ihr?</summary>
+        <p>Beides geht. In der KI-Manager-Ausbildung lernt jemand aus deinem Team, es selbst zu bauen. Bei der KI-Implementierung bauen wir es mit dir.</p>
+      </details>
+      <details>
+        <summary>Was kostet eine KI-Implementierung?</summary>
+        <p>Die Kosten erfährst du auf Anfrage im Informationsgespräch.</p>
+      </details>
+    </div>
+  </section>
+
+  <section id="verwandt" class="hell-abschnitt hell-weiss" aria-labelledby="verwandt-titel">
+    <div class="rahmen">
+      <h2 id="verwandt-titel">Passt dazu</h2>
+      <ul class="kacheln kacheln-klein" role="list">
+        <li>
+          <a class="kachel" href="/leistungen/ki-betriebssystem/">
+            <span class="kachel-bild"><img src="/bilder/leistungen/ki-betriebssystem-800.avif" srcset="/bilder/leistungen/ki-betriebssystem-480.avif 480w, /bilder/leistungen/ki-betriebssystem-800.avif 800w, /bilder/leistungen/ki-betriebssystem-1200.avif 1200w" sizes="(min-width: 75rem) 23rem, (min-width: 48rem) 33vw, 100vw" width="1200" height="675" alt="" loading="lazy" decoding="async"></span>
+            <span class="kachel-text"><h3 class="kachel-titel"><span class="ganz">KI-Betriebssystem</span></h3><span class="kachel-satz">Firmenwissen, das mitarbeitet.</span></span>
+            <span class="kachel-mehr" aria-hidden="true">Mehr erfahren</span>
+          </a>
+        </li>
+        <li>
+          <a class="kachel" href="/leistungen/automatisierung/">
+            <span class="kachel-bild"><img src="/bilder/leistungen/automatisierung-800.avif" srcset="/bilder/leistungen/automatisierung-480.avif 480w, /bilder/leistungen/automatisierung-800.avif 800w, /bilder/leistungen/automatisierung-1200.avif 1200w" sizes="(min-width: 75rem) 23rem, (min-width: 48rem) 33vw, 100vw" width="1200" height="675" alt="" loading="lazy" decoding="async"></span>
+            <span class="kachel-text"><h3 class="kachel-titel">Automatisierung</h3><span class="kachel-satz">Systeme verbinden, statt Daten abzutippen.</span></span>
+            <span class="kachel-mehr" aria-hidden="true">Mehr erfahren</span>
+          </a>
+        </li>
+        <li>
+          <a class="kachel" href="/ausbildung/">
+            <span class="kachel-bild"><img src="/bilder/leistungen/ki-ausbildung-800.avif" srcset="/bilder/leistungen/ki-ausbildung-480.avif 480w, /bilder/leistungen/ki-ausbildung-800.avif 800w, /bilder/leistungen/ki-ausbildung-1200.avif 1200w" sizes="(min-width: 75rem) 23rem, (min-width: 48rem) 33vw, 100vw" width="1200" height="675" alt="" loading="lazy" decoding="async"></span>
+            <span class="kachel-text"><h3 class="kachel-titel"><span class="ganz">KI-Ausbildung</span></h3><span class="kachel-satz">Jemand aus deinem Team baut eigene KI-Werkzeuge.</span></span>
+            <span class="kachel-mehr" aria-hidden="true">Mehr erfahren</span>
+          </a>
+        </li>
+      </ul>
+      <p class="alle-link"><a href="/leistungen/">Alle Leistungen im Überblick</a></p>
+    </div>
+  </section>
+
+  <section id="gespraech" class="kapitel finale buchung" aria-labelledby="gespraech-titel">
+    <div class="rahmen">
+      <h2 id="gespraech-titel">Sprich mit uns über deinen Betrieb.</h2>
+      <p class="einleitung">Im Infogespräch schauen wir gemeinsam, wo in deinem Betrieb die Zeit steckt und welcher Schritt zuerst kommt. Du buchst direkt im Kalender, bei Stefan oder bei Sandro.</p>
+      <div class="knopfreihe">
+        <a class="knopf" href="https://bookings.cloud.microsoft/book/Grobanalyse@swiss-lean.ch/s/bb764048-fe34-4ce4-ada8-b9b99915b2b5/" target="_blank" rel="noopener noreferrer">Infogespräch per Teams buchen</a>
+        <a class="knopf knopf-leise" href="https://bookings.cloud.microsoft/book/Grobanalyse@swiss-lean.ch/s/b6294d36-11c7-4c50-9d88-4ff55533c0d4/" target="_blank" rel="noopener noreferrer">Infogespräch per Telefon buchen</a>
+      </div>
+      <p class="hinweis">Beide Knöpfe öffnen den Buchungskalender von Microsoft Bookings in einem neuen Tab. Was dabei mit deinen Angaben geschieht, steht unter <a href="/datenschutz/">Datenschutz</a>.</p>
+    </div>
+  </section>
+
+</main>
+
+  <aside class="buchen-leiste" aria-label="Anmelden und Infogespräch buchen">
+    <a class="knopf knopf-leise leiste-buchung" href="https://bookings.cloud.microsoft/book/Grobanalyse@swiss-lean.ch/s/bb764048-fe34-4ce4-ada8-b9b99915b2b5/" target="_blank" rel="noopener noreferrer"><svg class="leiste-zeichen" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 7.5h11v9H3z M14 10.5l6-3.5v10l-6-3.5"/></svg><span class="leiste-text"><span class="lang">Infogespräch per </span>Teams<span class="kurz"> buchen</span></span></a>
+    <a class="knopf knopf-leise leiste-buchung" href="https://bookings.cloud.microsoft/book/Grobanalyse@swiss-lean.ch/s/b6294d36-11c7-4c50-9d88-4ff55533c0d4/" target="_blank" rel="noopener noreferrer"><svg class="leiste-zeichen" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.5 3.5h3l1.5 4.5-2 1.5a10 10 0 0 0 5.5 5.5l1.5-2 4.5 1.5v3a2 2 0 0 1-2 2A15.5 15.5 0 0 1 4.5 5.5a2 2 0 0 1 2-2z"/></svg><span class="leiste-text"><span class="lang">Infogespräch per </span>Telefon<span class="kurz"> buchen</span></span></a>
+    <a class="knopf anmelde-knopf" href="https://bookings.cloud.microsoft/book/Grobanalyse@swiss-lean.ch/s/bb764048-fe34-4ce4-ada8-b9b99915b2b5/" target="_blank" rel="noopener noreferrer"><span class="anmelde-haupt">Jetzt anmelden</span> <span class="anmelde-unter">zur <span class="ganz">KI-Manager-</span>Ausbildung</span><span class="nur-vorlesen">, Infogespräch buchen, öffnet Microsoft Bookings in neuem Tab</span><svg class="anmelde-pfeil" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15 M13 6l6 6-6 6"/></svg></a>
+  </aside>
+
+<footer class="fuss">
+  <div class="rahmen fuss-raster">
+    <p class="fuss-firma"><strong>swissLean AG</strong><br>Churerstrasse 88, 8808 Pfäffikon SZ</p>
+    <nav class="fuss-spalte" aria-label="Leistungen">
+      <p class="fuss-titel"><a href="/leistungen/">Leistungen</a></p>
+      <ul class="fuss-leistungen">
+        <li><a href="/leistungen/prozessanalyse/">Prozessanalyse</a></li>
+        <li><a href="/leistungen/lean-management/">Lean Management</a></li>
+        <li><a href="/leistungen/automatisierung/">Automatisierung</a></li>
+        <li><a href="/ausbildung/">KI-Ausbildung</a></li>
+        <li><a href="/leistungen/ki-implementierung/" aria-current="page">KI-Implementierung</a></li>
+        <li><a href="/leistungen/ki-betriebssystem/">KI-Betriebssystem</a></li>
+        <li><a href="/leistungen/digitale-transformation/">Digitale Transformation</a></li>
+        <li><a href="/leistungen/strategische-beratung/">Strategische Beratung</a></li>
+      </ul>
+    </nav>
+    <ul class="fuss-links">
+      <li><a href="/ausbildung/">Ausbildung</a></li>
+      <li><a href="/fragen/">Fragen und Antworten</a></li>
+      <li><a href="https://swiss-lean.ch/" target="_blank" rel="noopener noreferrer">swiss-lean.ch</a></li>
+      <li><a href="/datenschutz/">Datenschutz</a></li>
+      <li><a href="/impressum/">Impressum</a></li>
+    </ul>
+  </div>
+</footer>
+<link rel="stylesheet" href="/stil/menue.css">
+</body>
+</html>

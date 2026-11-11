@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ki-manager-ausbildung.ch/sitemap.xml

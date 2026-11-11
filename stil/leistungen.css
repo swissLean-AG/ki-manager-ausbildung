@@ -1,0 +1,946 @@
+/* Leistungen: heller Grund nach der Nachtfahrt ("das Licht ist an"). Kacheln, Objekt-Auftritt und Abschlussband der
+   Startseite, Übersicht und Leistungsseiten. Eine Leuchtfarbe #CC3300; Text in der Leuchtfarbe auf hellem Grund in
+   der dunkleren Abstufung, damit der Kontrast mindestens 4.5:1 erreicht.
+   --kachel-grund ist die gemessene Randfarbe der Objektbilder: Kachel und Bild gehen nahtlos ineinander. */
+
+:root {
+  --kachel-grund: #EEEEED;
+  --hell-1: #F7F7F5;
+  --hell-weiss: #FFFFFF;
+  --hell-text: #161b24;
+  --hell-leise: #4a5262;
+  --hell-linie: #d9d9d4;
+  --akzent-text: #a82a00;
+  --kurve: cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+/* ---------- Heller Grund ---------- */
+
+.hell,
+.hell-abschnitt {
+  color: var(--hell-text);
+  color-scheme: light;
+}
+
+.hell {
+  background: var(--kachel-grund);
+}
+
+.hell-abschnitt {
+  position: relative;
+  padding: clamp(3rem, 9vh, 5.5rem) 0;
+  background: var(--hell-1);
+}
+
+.hell-abschnitt-zwei {
+  background: var(--kachel-grund);
+}
+
+.hell-weiss {
+  background: var(--hell-weiss);
+}
+
+.hell a,
+.hell-abschnitt a {
+  color: var(--akzent-text);
+}
+
+.hell a:hover,
+.hell-abschnitt a:hover {
+  color: var(--hell-text);
+}
+
+.hell :focus-visible,
+.hell-abschnitt :focus-visible {
+  outline-color: var(--akzent-text);
+}
+
+.hell strong,
+.hell-abschnitt strong {
+  color: inherit;
+}
+
+.hell .dachzeile,
+.hell-abschnitt .dachzeile {
+  color: var(--akzent-text);
+}
+
+.hell .einleitung,
+.hell-abschnitt .einleitung {
+  color: var(--hell-leise);
+}
+
+.hell .brotkrumen ol,
+.hell .brotkrumen li + li::before {
+  color: var(--hell-leise);
+}
+
+.hell-abschnitt h2 {
+  max-width: 34ch;
+}
+
+.hell-abschnitt > .rahmen > p {
+  max-width: 46rem;
+  color: var(--hell-leise);
+}
+
+.knopf-hell {
+  background: transparent;
+  color: var(--hell-text) !important;
+  border-color: #b9b9b4;
+  box-shadow: none;
+}
+
+.knopf-hell:hover {
+  background: var(--hell-weiss);
+  border-color: var(--akzent-text);
+}
+
+.hell .knopf:not(.knopf-hell) {
+  color: var(--auf-akzent);
+}
+
+.rahmen-breit {
+  max-width: 90rem;
+}
+
+/* ---------- Kacheln ---------- */
+
+.kacheln {
+  list-style: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  background: var(--hell-linie);
+  border: 1px solid var(--hell-linie);
+}
+
+.kacheln > li {
+  display: flex;
+  background: var(--kachel-grund);
+}
+
+@media (min-width: 40rem) {
+  .kacheln {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 75rem) {
+  .kacheln {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 48rem) {
+  .kacheln-klein {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.kachel {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--kachel-grund);
+  color: var(--hell-text) !important;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.kachel-bild {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.kachel-bild img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: 50% 70%;
+  transition: transform 0.4s var(--kurve);
+}
+
+/* Verlauf aus dem Bild in die Textfläche, erscheint bei Zeigen und Fokus */
+.kachel-bild::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(204, 51, 0, 0) 45%, rgba(204, 51, 0, 0.55) 85%, #CC3300 100%);
+  opacity: 0;
+  transition: opacity 0.2s var(--kurve);
+}
+
+.kachel-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.875rem 1.25rem 0.5rem;
+  transition: background-color 0.2s var(--kurve), color 0.2s var(--kurve);
+}
+
+.kachel-titel {
+  margin: 0;
+  font-family: var(--schrift-titel);
+  font-size: 1.1875rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.kachel-satz {
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--hell-leise);
+  transition: color 0.2s var(--kurve);
+}
+
+.kachel-mehr {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.25rem 1.25rem 1.125rem;
+  font-family: var(--schrift-titel);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--akzent-text);
+  transition: background-color 0.2s var(--kurve), color 0.2s var(--kurve), opacity 0.2s var(--kurve);
+}
+
+.kachel-mehr::after {
+  content: '';
+  width: 0.45em;
+  height: 0.45em;
+  border-right: 2px solid currentColor;
+  border-top: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.25s var(--kurve);
+}
+
+/* Auf Geräten mit Zeiger erscheint "Mehr erfahren" erst bei Zeigen und Fokus, auf Touch steht es immer da. */
+@media (hover: hover) and (min-width: 40rem) {
+  .kachel-mehr {
+    opacity: 0;
+  }
+}
+
+.kachel:hover .kachel-bild::after,
+.kachel:focus-visible .kachel-bild::after {
+  opacity: 1;
+}
+
+.kachel:hover .kachel-text,
+.kachel:hover .kachel-mehr,
+.kachel:focus-visible .kachel-text,
+.kachel:focus-visible .kachel-mehr {
+  background: #CC3300;
+  color: #ffffff;
+  opacity: 1;
+}
+
+.kachel:hover .kachel-satz,
+.kachel:focus-visible .kachel-satz {
+  color: #ffffff;
+}
+
+.kachel:hover .kachel-bild img,
+.kachel:focus-visible .kachel-bild img {
+  transform: translateY(-4%) scale(1.04);
+}
+
+.kachel:hover .kachel-mehr::after,
+.kachel:focus-visible .kachel-mehr::after {
+  transform: translateX(0.2em) rotate(45deg);
+}
+
+.kachel:focus-visible {
+  z-index: 1;
+  outline: 3px solid var(--hell-text);
+  outline-offset: -3px;
+  border-radius: 0;
+}
+
+.alle-link {
+  margin: 1.75rem 0 0;
+}
+
+.alle-link a,
+.pfeil-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--schrift-titel);
+  font-weight: 600;
+}
+
+.pfeil-links {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+}
+
+/* ---------- Startseite: Licht an, Objekt-Auftritt ---------- */
+
+.leistungen-start {
+  position: relative;
+  padding-bottom: clamp(3rem, 10vh, 6rem);
+}
+
+/* Weicher Übergang von der Nacht in den hellen Grund, mit einem Hauch Leuchtfarbe dort, wo das Licht angeht */
+.licht-an {
+  height: clamp(7rem, 24svh, 15rem);
+  background:
+    radial-gradient(55% 45% at 50% 62%, rgba(204, 51, 0, 0.14), transparent 100%),
+    linear-gradient(180deg, var(--buehne) 0%, #3b3f46 30%, #9d9e9d 62%, var(--kachel-grund) 100%);
+}
+
+.auftritt-buehne {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.auftritt-text {
+  position: relative;
+  z-index: 1;
+  max-width: 54rem;
+  text-align: center;
+}
+
+.auftritt-text h2 {
+  font-size: clamp(1.875rem, 1.1rem + 3.2vw, 3.5rem);
+  max-width: none;
+}
+
+.auftritt-text .einleitung {
+  margin-inline: auto;
+}
+
+.auftritt-objekt {
+  width: min(100%, 70rem);
+  margin: -1rem auto 0;
+  transform-origin: 50% 60%;
+  will-change: transform;
+}
+
+.auftritt-objekt img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Angepinnter Auftritt nur mit Bewegung und ab 30rem Bildhöhe. Darunter (Handy quer, sehr niedrige Fenster) bliebe
+   neben dem Text kein Platz für das Objekt: Dort steht der Abschnitt im Fluss, das Objekt in seiner Endlage. */
+@media (prefers-reduced-motion: no-preference) and (min-height: 30.0625rem) {
+  .auftritt {
+    height: 220svh;
+  }
+
+  /* Angepinnt unter dem Gebäudeplan (oben auf dem Handy) und über der Buchen-Leiste. Der Text behält seine Höhe,
+     das Objekt nimmt nur den Rest: So steht die Überschrift auf jeder Grösse ganz im Bild. */
+  .auftritt-buehne {
+    position: sticky;
+    top: var(--oben-frei, 0px);
+    height: calc(100svh - var(--oben-frei, 0px));
+    justify-content: center;
+    padding: 1rem 0 var(--unten-frei, 0px);
+  }
+
+  .auftritt-text {
+    flex: none;
+  }
+
+  .auftritt-objekt {
+    flex: 0 1 auto;
+    min-height: 0;
+    width: min(100%, 64rem, 120svh);
+    aspect-ratio: 16 / 9;
+  }
+
+  .auftritt-objekt img {
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Browser mit Scroll-Zeitleiste: das Objekt steigt, wird kleiner und dreht sich gerade, an die Scrolllage gekoppelt. */
+  @supports (animation-timeline: view()) {
+    .auftritt {
+      view-timeline-name: --auftritt;
+    }
+
+    .auftritt-objekt {
+      animation: objekt-auftritt linear both;
+      animation-timeline: --auftritt;
+      animation-range: entry 50% contain 75%;
+    }
+  }
+
+  /* Sonst setzt das Skript --auftritt von 0 bis 1 (ohne Skript: 1, also Endlage). */
+  @supports not (animation-timeline: view()) {
+    .auftritt-objekt {
+      transform:
+        translateY(calc((1 - var(--auftritt, 1)) * 70svh))
+        scale(calc(1 + (1 - var(--auftritt, 1)) * 0.6))
+        rotate(calc((1 - var(--auftritt, 1)) * -12deg));
+    }
+  }
+}
+
+@keyframes objekt-auftritt {
+  from {
+    transform: translateY(70svh) scale(1.6) rotate(-12deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+.leistungen-start .kacheln {
+  margin-top: clamp(1rem, 4vh, 2.5rem);
+}
+
+/* ---------- Abschlussband ---------- */
+
+.abschlussband {
+  padding: clamp(3.5rem, 12vh, 7rem) 0;
+  background: #CC3300;
+  color: #ffffff;
+}
+
+.abschlussband .schlusszeile {
+  max-width: 16ch;
+  margin-bottom: 0.4em;
+  font-size: clamp(2.125rem, 1.2rem + 4vw, 4.5rem);
+  line-height: 1.05;
+  color: #ffffff;
+}
+
+.abschlussband p {
+  max-width: 40rem;
+  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.3125rem);
+  color: #ffffff;
+}
+
+.abschlussband :focus-visible {
+  outline-color: #ffffff;
+}
+
+.knopf-weiss {
+  margin-top: 0.75rem;
+  background: #ffffff;
+  border-color: #ffffff;
+  color: var(--akzent-text);
+  box-shadow: none;
+}
+
+.knopf-weiss:hover {
+  background: #fff1eb;
+  color: var(--hell-text);
+}
+
+/* ---------- Kopf der Leistungsseite und der Übersicht ---------- */
+
+.leistung-kopf,
+.uebersicht-kopf {
+  padding: clamp(0.75rem, 2vh, 1.5rem) 0 clamp(2.5rem, 7vh, 4.5rem);
+}
+
+.leistung-kopf {
+  overflow: clip;
+}
+
+.leistung-kopf-raster {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'brot' 'bild' 'text';
+  gap: 0 3rem;
+}
+
+.leistung-kopf-raster > .brotkrumen {
+  grid-area: brot;
+}
+
+.leistung-bild {
+  grid-area: bild;
+  margin: 0 calc(-0.5 * var(--rand)) 0.5rem;
+}
+
+.leistung-kopf-text {
+  grid-area: text;
+}
+
+/* Breit: Text links, Objekt rechts bis an den Bildschirmrand. Bild- und Seitengrund sind dieselbe Farbe. */
+@media (min-width: 64rem) {
+  .leistung-kopf-raster {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas: 'brot bild' 'text bild';
+  }
+
+  .leistung-bild {
+    align-self: center;
+    margin: 0 calc(-1 * max(var(--rand), (100vw - var(--breite)) / 2 + var(--rand))) 0 -1rem;
+  }
+}
+
+.leistung-kopf h1,
+.uebersicht-kopf h1 {
+  font-size: clamp(1.625rem, 1.15rem + 1.6vw, 2.5rem);
+  letter-spacing: -0.015em;
+  max-width: 20ch;
+  overflow-wrap: normal;
+}
+
+/* Wörter mit Bindestrich: auf dem Handy darf der Bindestrich trennen, breit bleiben sie ganz */
+.leistung-kopf h1 .ganz,
+.uebersicht-kopf h1 .ganz {
+  display: inline;
+  white-space: normal;
+}
+
+@media (min-width: 64rem) {
+  .leistung-kopf h1 .ganz,
+  .uebersicht-kopf h1 .ganz {
+    white-space: nowrap;
+  }
+}
+
+/* Schmale Bildschirme, gemessen in Schriftgrössen (wie bei .ganz in basis.css): Ein Wort, das allein breiter ist als
+   die Zeile (grosse Systemschrift), bricht um, statt über den Rand zu laufen. Sonst passt jedes Wort in die Zeile. */
+@media (max-width: 29.99em) {
+  .leistung-kopf h1,
+  .uebersicht-kopf h1 {
+    overflow-wrap: break-word;
+  }
+}
+
+.uebersicht-kopf h1 {
+  max-width: 24ch;
+}
+
+.antwort {
+  max-width: 40rem;
+  margin-bottom: 1.25rem;
+  padding-left: 1rem;
+  border-left: 3px solid #CC3300;
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  line-height: 1.55;
+  color: var(--hell-text);
+}
+
+.stand {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--hell-leise);
+}
+
+.leistung-bild img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+
+/* ---------- Abschnitte der Leistungsseite ---------- */
+
+.karten {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+  margin: 2rem 0 0;
+  padding: 0;
+}
+
+.karte {
+  position: relative;
+  padding: 1.5rem 1.5rem 1.375rem;
+  background: var(--hell-weiss);
+  border: 1px solid var(--hell-linie);
+  border-radius: 12px;
+}
+
+.karte::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 1.5rem;
+  width: 2.5rem;
+  height: 3px;
+  background: #CC3300;
+  border-radius: 0 0 2px 2px;
+}
+
+.karte h3 {
+  font-size: 1.1875rem;
+  margin-bottom: 0.5rem;
+}
+
+.karte p {
+  margin: 0;
+  color: var(--hell-leise);
+}
+
+/* Schrittgrafik: Zeitstrahl mit Nummern, auf dem Handy senkrecht, breit waagrecht */
+.schrittgrafik {
+  counter-reset: schritt;
+  list-style: none;
+  display: grid;
+  /* Spur darf schmaler werden als das längste Wort, sonst schiebt es bei grosser Schrift die ganze Grafik hinaus. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  margin: 2.25rem 0 0;
+  padding: 0;
+}
+
+.schritt {
+  counter-increment: schritt;
+  position: relative;
+  padding: 0 0 2rem 4rem;
+}
+
+.schritt::before {
+  content: counter(schritt, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: #CC3300;
+  color: #ffffff;
+  font-family: var(--schrift-titel);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  box-shadow: 0 0 0 6px rgba(204, 51, 0, 0.12);
+}
+
+.schritt::after {
+  content: '';
+  position: absolute;
+  left: calc(1.375rem - 1px);
+  top: 3.25rem;
+  bottom: 0.5rem;
+  width: 2px;
+  background: linear-gradient(180deg, #CC3300, rgba(204, 51, 0, 0.18));
+}
+
+.schritt:last-child::after {
+  display: none;
+}
+
+.schritt-titel {
+  margin: 0.55rem 0 0.375rem;
+  font-size: 1.1875rem;
+}
+
+.schritt p {
+  margin: 0;
+  color: var(--hell-leise);
+  max-width: 34rem;
+}
+
+.schritt-link {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-height: 44px;
+  margin-top: 0.25rem;
+  font-family: var(--schrift-titel);
+  font-weight: 600;
+}
+
+.schritt-link::after {
+  content: '';
+  width: 0.45em;
+  height: 0.45em;
+  margin-left: 0.55em;
+  border-right: 2px solid currentColor;
+  border-top: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+@media (min-width: 56rem) {
+  .schrittgrafik {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem 2rem;
+  }
+
+  .schrittgrafik-kurz {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  }
+
+  .schritt {
+    padding: 4rem 0 0;
+  }
+
+  .schritt::after {
+    left: 3.75rem;
+    right: -1.75rem;
+    top: calc(1.375rem - 1px);
+    bottom: auto;
+    width: auto;
+    height: 2px;
+    background: linear-gradient(90deg, #CC3300, rgba(204, 51, 0, 0.18));
+  }
+
+  .schrittgrafik:not(.schrittgrafik-kurz) .schritt:nth-child(3n)::after {
+    display: none;
+  }
+
+  .schritt-titel {
+    margin-top: 0;
+  }
+}
+
+.wegweiser-hinweis {
+  margin-top: 2rem;
+  padding: 1.5rem 1.5rem 1rem;
+  background: var(--hell-weiss);
+  border: 1px solid var(--hell-linie);
+  border-left: 4px solid #CC3300;
+  border-radius: 0 12px 12px 0;
+  max-width: 52rem;
+}
+
+.wegweiser-hinweis h3 {
+  font-size: 1.1875rem;
+  margin-bottom: 0.375rem;
+}
+
+.wegweiser-hinweis p {
+  margin: 0;
+  color: var(--hell-leise);
+}
+
+/* Ergebnis und Für wen */
+.zwei-spalten {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem 4rem;
+}
+
+@media (min-width: 56rem) {
+  .zwei-spalten {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.zwei-spalten h2 {
+  font-size: clamp(1.5rem, 1.15rem + 1.4vw, 2.125rem);
+}
+
+.haken,
+.liste-hell {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+}
+
+.haken li,
+.liste-hell li {
+  position: relative;
+  padding: 0.625rem 0 0.625rem 2.25rem;
+  border-bottom: 1px solid var(--hell-linie);
+}
+
+.haken li::before {
+  content: '';
+  position: absolute;
+  left: 0.35rem;
+  top: 0.85rem;
+  width: 0.55rem;
+  height: 0.95rem;
+  border-right: 3px solid #CC3300;
+  border-bottom: 3px solid #CC3300;
+  transform: rotate(40deg);
+}
+
+.liste-hell li::before {
+  content: '';
+  position: absolute;
+  left: 0.4rem;
+  top: 1.15rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #CC3300;
+}
+
+.fuer-wen > p {
+  color: var(--hell-leise);
+}
+
+.selbst-bauen {
+  margin: 1.5rem 0 0;
+  padding: 1rem 1.25rem;
+  background: var(--hell-weiss);
+  border-left: 3px solid #CC3300;
+  border-radius: 0 10px 10px 0;
+  color: var(--hell-text);
+}
+
+/* Belegt aus der Praxis */
+.belege {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 1rem;
+  margin: 2rem 0 0;
+  padding: 0;
+}
+
+.beleg {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: var(--hell-weiss);
+  border: 1px solid var(--hell-linie);
+  border-radius: 12px;
+}
+
+.beleg-wert {
+  margin: 0 0 0.5rem;
+  font-family: var(--schrift-titel);
+  font-size: clamp(2rem, 1.6rem + 1.6vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #CC3300;
+}
+
+.beleg-text {
+  flex: 1;
+  margin: 0 0 1rem;
+  color: var(--hell-text);
+}
+
+.beleg-quelle {
+  margin: 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--hell-linie);
+  font-size: 0.875rem;
+  color: var(--hell-leise);
+}
+
+/* Fragen auf hellem Grund */
+.hell-abschnitt details {
+  border-bottom-color: var(--hell-linie);
+}
+
+.hell-abschnitt details:first-of-type {
+  border-top: 1px solid var(--hell-linie);
+  margin-top: 1.5rem;
+}
+
+.hell-abschnitt summary {
+  padding-block: 1rem;
+  font-size: 1.0625rem;
+}
+
+.hell-abschnitt summary:hover {
+  color: var(--akzent-text);
+}
+
+.hell-abschnitt summary::after {
+  border-color: var(--akzent-text);
+}
+
+.hell-abschnitt details p {
+  color: var(--hell-leise);
+  max-width: 44rem;
+}
+
+/* Buchung unter den hellen Abschnitten: ruhige Nacht */
+.buchung {
+  border-top: 0;
+}
+
+/* ---------- Ruhige Einblendungen beim Scrollen ----------
+   Nur mit Skript und ohne reduzierte Bewegung: Das Skript markiert Elemente unterhalb des Bildschirms als wartend.
+   Ohne Skript ist alles sichtbar; Deckkraft und Verschiebung ändern das Layout nicht. */
+.einblenden {
+  transition: opacity 0.7s var(--kurve), transform 0.7s var(--kurve);
+}
+
+/* Wartend ohne Übergang: Nur das Einblenden ist animiert, nie ein Ausblenden nach dem Laden. */
+.einblenden.wartet {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition: none;
+}
+
+.einblenden:nth-child(2) {
+  transition-delay: 0.08s;
+}
+
+.einblenden:nth-child(3) {
+  transition-delay: 0.16s;
+}
+
+.einblenden:nth-child(4) {
+  transition-delay: 0.24s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .einblenden,
+  .einblenden.wartet {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .kachel-bild img,
+  .kachel-bild::after {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kachel,
+  .karte,
+  .beleg {
+    border: 1px solid CanvasText;
+  }
+
+  .kachel:focus-visible {
+    outline: 3px solid Highlight;
+  }
+}
+
+/* Kachelbereich der Startseite: der helle Grund läuft in Weiss aus, die Kacheln heben sich davon ab */
+.leistungen-start {
+  padding-bottom: 0;
+}
+
+.kacheln-flaeche {
+  padding: clamp(2rem, 6vh, 4rem) 0 clamp(3rem, 10vh, 6rem);
+  background: linear-gradient(180deg, var(--kachel-grund) 0, var(--hell-weiss) clamp(6rem, 18vh, 12rem));
+}
+
+/* Rechts bleibt Platz für den Gebäudeplan, solange er am Rand steht */
+.leistungen-start .rahmen,
+.abschlussband .rahmen {
+  padding-right: calc(var(--rand) + var(--rechts-frei, 0px));
+}
+
+/* Schmal: Das Modell füllt rund 85 % der Bildbreite, das Bild darf deshalb etwas über den Rand ragen (Grund gleich). */
+@media (max-width: 40rem) {
+  .auftritt-objekt {
+    width: 118%;
+    max-width: none;
+    margin-inline: -9%;
+  }
+}

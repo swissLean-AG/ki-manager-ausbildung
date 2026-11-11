@@ -1,0 +1,1038 @@
+/* Scroll-Bühne. Zwei getrennte Ebenen: hinten die Bildspur (Schlüsselbilder als <picture>,
+   mit JavaScript die Fahrt auf einer fixierten Zeichenfläche), davor Texte und Einblendungen als HTML.
+   Ohne JavaScript: gestapelte Stockwerke, je Station ein Schlüsselbild als Band, Einblendungen und Karten darunter.
+   Mit JavaScript (html.buehne-an): fixierte Bühne, jede Station hat eine Fahrstrecke (--strecke) als Scrollweg.
+   Bewegung nur über transform und opacity; reduzierte Bewegung schaltet basis.css auf sofort. */
+
+:root {
+  --karte: rgba(11, 17, 27, 0.88);
+  --strecke: 250vh;
+  --oben-frei: 3rem;
+  /* Platz der festen Leiste unten (Höhe in basis.css, wächst mit der Leiste). */
+  --unten-frei: var(--leiste-hoehe);
+  --rechts-frei: 0rem;
+}
+
+html {
+  scroll-padding-top: 3.75rem;
+  scroll-padding-bottom: calc(var(--leiste-hoehe) + 1.25rem);
+}
+
+/* Nur für Screenreader sichtbar (Rest des Linktexts auf schmalen Bildschirmen). */
+.lang {
+  white-space: nowrap;
+}
+
+/* ---------- Bildbänder ohne JavaScript ---------- */
+
+.hero > .ebenen,
+.station > .ebenen,
+.finale > .ebenen {
+  bottom: auto;
+  height: 100svh;
+}
+
+.hero > .ebenen::after,
+.station > .ebenen::after,
+.finale > .ebenen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11, 17, 27, 0.35) 0%, rgba(11, 17, 27, 0) 22%, rgba(11, 17, 27, 0) 55%, var(--buehne) 100%);
+}
+
+.ebenen {
+  transition: opacity 0.5s ease;
+}
+
+/* Mit JavaScript holt die Bühne die Schlüsselbilder der Stationen selbst, wenn sie gebraucht werden. Bis zum Start
+   (seite.mjs setzt fahrt-gestartet und nimmt es nie zurück) bleiben sie verborgen; verborgene Lazy-Bilder lädt der
+   Browser nicht, so nehmen sie dem Startbild auf einer Handyleitung keine Bandbreite. Ohne JavaScript gilt das nicht. */
+@media (scripting: enabled) {
+  html:not(.fahrt-gestartet) .station > .ebenen img {
+    display: none;
+  }
+}
+
+/* Start: Bild oben, Textkarte unten links */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 34svh 0 clamp(1.5rem, 4vh, 3rem);
+  background: var(--buehne);
+}
+
+.hero .hero-text {
+  width: auto;
+  max-width: 46rem;
+  margin: 0 var(--rand);
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  background: var(--karte);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+}
+
+.hero .hero-text .knopfreihe {
+  margin-bottom: 1rem;
+}
+
+.hero .hero-text .einstiege {
+  margin-bottom: 0;
+}
+
+.hero .plan-titel {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: var(--karte);
+  border-radius: 6px;
+}
+
+.hero .plan-liste a {
+  background: var(--karte);
+}
+
+@media (min-width: 77rem) {
+  .hero .hero-text {
+    margin-left: calc((100% - var(--breite)) / 2 + var(--rand));
+  }
+}
+
+/* Lage der Startkarte nach der Gestaltung im Gestaltungsbogen.
+   Querformat ab 64rem: Die Karte steht ganz im ersten Bild, senkrecht mittig unter Kopf und Plan, und rückt nach
+   links, damit rechts das Gebäude frei bleibt. Abstand links aus den gestalteten Lagen: bei 1366 px rund 50 px, bei 1440 px
+   rund 75 px, bei 1920 px rund 230 px, bei 3440 px rund 14 % der Breite, nie weniger als der Seitenrand. Auf sehr
+   breiten Bildschirmen wird die Karte breiter (40 % der Breite), die Zeilen bleiben so lang wie bisher.
+   Die Stationsliste folgt unter dem ersten Bild. */
+@media (min-width: 64rem) and (min-aspect-ratio: 1/1) {
+  .hero {
+    display: grid;
+    grid-template-rows: minmax(calc(100svh - 4.75rem - var(--oben-frei)), auto) auto;
+    justify-content: stretch;
+    align-content: start;
+    row-gap: 1rem;
+    padding-top: 0;
+  }
+
+  .hero {
+    --karte-links: clamp(var(--rand), 32.7vw - 24.75rem, 14vw);
+    /* Rechte Kante der Karte, gemessen ab dem linken Rand des Abschnitts (Breite wie die Karte im Raster). */
+    --karte-rechts: calc(var(--karte-links) + min(max(46rem, 40vw - 2rem), 100% - var(--karte-links) - var(--rand)));
+  }
+
+  /* Der Rand unten hält die Oberkante der Karte dort, wo sie in der Gestaltung steht: Die Karte ist seit dem
+     kürzeren Einleitungstext und ohne die beiden Einstiegslinks rund 6rem niedriger, mittig gesetzt rückte sie sonst
+     um die Hälfte davon nach unten. */
+  .hero .hero-text {
+    grid-row: 1;
+    grid-column: 1;
+    align-self: center;
+    max-width: max(46rem, 40vw - 2rem);
+    margin-left: var(--karte-links);
+    margin-bottom: 6rem;
+  }
+
+  .hero .plan {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .hero .hero-text > * {
+    max-width: 41.5rem;
+  }
+}
+
+/* ---------- Hausgrafik auf der Startseite ----------
+   Haus in Linien nach der Gestaltung im Gestaltungsbogen. Das Dach ist ein SVG-Umriss, die Texte sind HTML in der
+   Seitenschrift; so zeichnet Chromium sie auch beim Ein- und Ausblenden vollständig. Alle Masse in Einheiten der
+   Zeichnung (520 Einheiten = Breite der Grafik), die Grafik skaliert damit wie ein Bild und braucht kein Netz.
+   Querformat: rechts neben der Startkarte, Mitte bei rund 78 % der Breite, senkrecht mittig wie die Karte, frei vom
+   Gebäudeplan. Hochformat: zentriert über der Karte im freien Bild unter dem Plan. Wo der Platz für lesbare Schrift
+   fehlt (schmales Querformat, niedrige Bildschirme), bleibt sie weg. */
+.hausgrafik {
+  display: none;
+  container-type: inline-size;
+  --haus-hoehe: 0.962;
+}
+
+.haus {
+  --e: calc(100cqi / 520);
+  position: relative;
+  font-family: var(--schrift-titel);
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
+  color: #fff;
+}
+
+.haus-dach {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.haus-dach path {
+  fill: rgba(204, 51, 0, 0.12);
+  stroke: var(--akzent-hell);
+  stroke-width: 5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.haus-kasten {
+  margin: 0;
+}
+
+.haus-text {
+  display: block;
+  hyphens: manual;
+}
+
+.haus-steuerung {
+  position: absolute;
+  top: calc(108 * var(--e));
+  left: 50%;
+  translate: -50% 0;
+  padding: calc(5 * var(--e)) calc(16 * var(--e));
+  font-size: calc(22 * var(--e));
+  white-space: nowrap;
+  background: rgba(11, 17, 27, 0.9);
+  border: calc(2.5 * var(--e)) solid #ffb27a;
+  border-radius: calc(40 * var(--e));
+}
+
+/* Schild "KI-Modell frei wählbar" rechts oben neben dem Dach (bisher ein Kreis "KI tauschbar").
+   Zwei Zeilen auf deckendem Grund, damit der Kontrast auf jedem Bild gleich bleibt (#ffb27a und #fff auf #3e180e,
+   über 7:1). Schrift mindestens 10 px, sonst mit der Zeichnung; alle Masse des Schilds hängen an dieser einen Grösse. */
+.haus-abzeichen {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15em;
+  font-size: max(calc(15 * var(--e)), 10px);
+  line-height: 1.1;
+  padding: 0.4em 0.65em 0.45em;
+  background: #3e180e;
+  border: 0.12em solid var(--akzent-hell);
+  border-radius: 0.45em;
+  box-shadow: 0 0.2em 0.6em rgba(0, 0, 0, 0.35);
+}
+
+.haus-modell {
+  font-size: 1.2em;
+  color: #ffb27a;
+  white-space: nowrap;
+}
+
+.haus-wahl {
+  font-weight: 650;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.haus-wand {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(18 * var(--e)) calc(20 * var(--e));
+  margin: calc(-4 * var(--e)) calc(42 * var(--e)) 0;
+  padding: calc(25 * var(--e));
+  background: rgba(11, 17, 27, 0.45);
+  border: calc(5 * var(--e)) solid var(--akzent-hell);
+}
+
+.haus-raum {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(6 * var(--e));
+  min-height: calc(100 * var(--e));
+  padding: calc(8 * var(--e)) calc(4 * var(--e));
+  font-size: calc(25 * var(--e));
+  background: rgba(30, 36, 46, 0.92);
+  border: calc(2 * var(--e)) solid rgba(255, 255, 255, 0.35);
+  border-radius: calc(10 * var(--e));
+}
+
+.haus-raum-akzent {
+  background: rgba(62, 24, 14, 0.92);
+  border-color: var(--akzent-hell);
+}
+
+.haus-raum-breit {
+  grid-column: 1 / -1;
+  min-height: calc(96 * var(--e));
+}
+
+.haus-zusatz {
+  font-size: calc(20 * var(--e));
+  font-weight: 600;
+  color: #c3cdd9;
+}
+
+.haus-fundament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(34 * var(--e));
+  margin: 0 calc(22 * var(--e));
+  font-size: calc(21 * var(--e));
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: var(--akzent);
+}
+
+/* Hochformat und schmale Bildschirme: im freien Bild über der Karte. Die Karte beginnt nie höher als 34svh unter
+   der Oberkante des Abschnitts (dessen Innenabstand oben), darüber bleibt je 1rem Luft. */
+@media (min-height: 45rem) and (max-width: 63.99rem), (min-height: 45rem) and (orientation: portrait) {
+  .hero .hausgrafik {
+    --haus-b: min((34svh - 2rem) / var(--haus-hoehe), 100vw - 2 * var(--rand), 24rem);
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: calc(1rem + (34svh - 2rem - var(--haus-b) * var(--haus-hoehe)) / 2);
+    left: 0;
+    right: 0;
+    width: var(--haus-b);
+    margin-inline: auto;
+  }
+}
+
+/* Querformat mit Raster: rechts neben der Karte. Unter 71.25rem reicht der Platz neben der Karte nicht für lesbare
+   Schrift, ebenso auf niedrigen Bildschirmen. */
+@media (min-width: 64rem) and (min-aspect-ratio: 1/1) {
+  .hero .hausgrafik {
+    display: none;
+  }
+}
+
+@media (min-width: 71.25rem) and (min-aspect-ratio: 1/1) and (min-height: 34rem) {
+  .hero .hausgrafik {
+    --haus-b: min(29.3vw, 55vh, 100% - var(--karte-rechts) - 1.5rem - var(--rand) - var(--rechts-frei));
+    display: block;
+    position: relative;
+    z-index: 1;
+    top: auto;
+    grid-row: 1;
+    grid-column: 1;
+    align-self: center;
+    justify-self: start;
+    width: var(--haus-b);
+    margin: 0 0 0 clamp(var(--karte-rechts) + 1.5rem, 78% - var(--haus-b) / 2, 100% - var(--rand) - var(--rechts-frei) - var(--haus-b));
+  }
+}
+
+/* Während einer Gleitfahrt blendet die Grafik mit der Startkarte aus und kehrt mit ihr zurück. */
+.halte-an .hero > .hausgrafik {
+  transition: opacity 0.4s ease;
+}
+
+.gleitet .hero > .hausgrafik {
+  opacity: 0;
+}
+
+/* Hochformat: Startkarte waagrecht mittig (Tablet hoch); auf dem Handy füllt sie die Breite wie bisher. */
+@media (orientation: portrait) {
+  .hero .hero-text {
+    margin-inline: max(var(--rand), (100% - 46rem) / 2);
+  }
+}
+
+/* Erster Bildschirm ohne Querformat-Raster (Handy, Tablet hoch, schmale Fenster): Die erste Zeile des Abschnitts ist
+   genau so hoch wie der Platz unter Kopf und Plan. Darin steht die Startkarte ganz über der festen Leiste; die
+   Stationsliste beginnt erst darunter und wird nie angeschnitten. Ist die Karte höher als der Platz (lange Texte, grosse
+   Schrift), wächst die Zeile und die Karte beginnt direkt unter Kopf und Plan.
+   Kopfhöhe: Innenabstand 2rem, Marke oder Menüknopf (mindestens 44 px, mit grosser Schrift zwei Zeilen der Marke) und
+   die leere zweite Zeile des Kopfs (Abstand 0.5rem). */
+@media not all and (min-width: 64rem) and (min-aspect-ratio: 1/1) {
+  .hero {
+    --kopf-hoehe: calc(2.5rem + max(44px, 2.55rem));
+    display: grid;
+    grid-template-rows: minmax(calc(100svh - var(--kopf-hoehe) - var(--oben-frei)), auto);
+    justify-content: stretch;
+    align-content: start;
+    row-gap: 1rem;
+    padding-top: 0;
+  }
+
+  /* Handy: Karte unten über der Leiste, darüber bleibt das Bild frei. */
+  .hero .hero-text {
+    grid-row: 1;
+    align-self: end;
+    margin-top: 0.5rem;
+    margin-bottom: calc(var(--leiste-hoehe) + 0.75rem);
+  }
+
+  .hero .hero-text > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Schmale Handys (bis 376 px bei normaler Schrift): Karte etwas dichter, damit sie ganz über die Leiste passt. */
+@media (max-width: 23.5rem) {
+  .hero .hero-text {
+    padding: 1rem;
+  }
+
+  .hero .hero-text .dachzeile {
+    margin-bottom: 0.5rem;
+  }
+
+  .hero .hero-text .knopfreihe {
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+}
+
+/* Tablet hoch: Die Karte bleibt an ihrem Platz unter dem Band mit der Hausgrafik (Lage aus dem Gestaltungsbogen).
+   Die Oberkante hängt am Rand oben, nicht an der Höhe der Karte; ein kürzerer Text verschiebt sie darum nicht, und
+   ein Rand unten wie im Querformat ist hier nicht nötig. */
+@media (min-width: 40rem) and (min-height: 45rem) and (max-width: 63.99rem), (min-width: 40rem) and (min-height: 45rem) and (orientation: portrait) {
+  .hero .hero-text {
+    align-self: start;
+    margin-top: 34svh;
+  }
+}
+
+/* Handy: Über der Karte reicht der Platz nicht für eine lesbare Hausgrafik. Sie folgt direkt unter der Karte, ganz
+   und so breit wie bisher, vor der Stationsliste. */
+@media (max-width: 39.99rem) and (min-height: 45rem) {
+  .hero .hausgrafik {
+    --haus-b: min(100vw - 2 * var(--rand), 24rem);
+    position: relative;
+    top: auto;
+    grid-row: 2;
+    margin-top: 1rem;
+  }
+}
+
+/* Querformat mit wenig Höhe: Die Karte steht mittig zwischen Kopf und Leiste, nicht unter der Leiste. */
+@media (min-width: 64rem) and (min-aspect-ratio: 1/1) and (max-height: 52rem) {
+  .hero .hero-text {
+    margin-bottom: var(--leiste-hoehe);
+  }
+}
+
+/* Stationen: Schlüsselbild als Band, Karten darüber */
+.station,
+.station:nth-of-type(even) {
+  padding-top: 62svh;
+  background: var(--buehne);
+}
+
+/* Mit JavaScript gilt der Aufbau mit Fahrstrecken schon vor dem Start: gleiche Höhe beim Umschalten. */
+@media (scripting: enabled) {
+  .station,
+  .station:nth-of-type(even) {
+    padding-top: var(--strecke);
+    border-top: 0;
+    scroll-margin-top: calc(55vh - var(--strecke));
+  }
+
+  #chefetage {
+    padding-bottom: 45vh;
+  }
+}
+
+.karte-kopf {
+  max-width: 52rem;
+  margin-bottom: 1rem;
+  padding: clamp(1rem, 2.5vw, 1.75rem);
+  background: var(--karte);
+  border-radius: 14px;
+}
+
+.karte-kopf h2 {
+  margin-bottom: 0;
+}
+
+.station .stimme {
+  background: rgba(15, 22, 34, 0.94);
+}
+
+.station-weiter a {
+  padding: 0.25rem 0.875rem;
+  background: var(--karte);
+  border-radius: 8px;
+}
+
+/* Textfassung der Einblendungen für Screenreader (einblendungen.mjs), die schwebende Ebene ist aria-hidden. */
+.einblendungen-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Einblendungen ---------- */
+
+.einblendungen {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.75rem;
+  max-width: var(--breite);
+  margin: 0 auto 1.25rem;
+  padding: 0 var(--rand);
+}
+
+.einblendungen .einblendung {
+  margin: 0;
+  padding: 0.9rem 1.15rem;
+  background: var(--karte);
+  border: 1px solid rgba(255, 122, 69, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.35);
+}
+
+.einblendung.schriftzug {
+  font-family: var(--schrift-titel);
+  font-size: clamp(1.25rem, 0.9rem + 1.8vw, 2.375rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text);
+  text-wrap: balance;
+}
+
+.einblendung.punkte ul {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.einblendung.punkte li {
+  margin: 0.2rem 0;
+}
+
+.einblendung.punkte li::marker {
+  color: var(--akzent-hell);
+}
+
+.punkte-titel {
+  margin: 0 0 0.25rem;
+  font-weight: 650;
+}
+
+.statistik-titel {
+  margin-bottom: 0.35rem;
+  font-family: var(--schrift-titel);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--akzent-hell);
+}
+
+.statistik-zeile {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 0.15rem 0.75rem;
+  margin: 0.4rem 0 0;
+}
+
+.statistik-label {
+  font-size: 0.9375rem;
+  color: var(--text-leise);
+}
+
+.statistik-wert {
+  font-family: var(--schrift-titel);
+  font-size: 1.375rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  text-align: right;
+}
+
+.statistik-nachher .statistik-wert {
+  color: var(--akzent-hell);
+}
+
+.statistik-balken {
+  grid-column: 1 / -1;
+  display: block;
+  height: 0.5rem;
+  border-radius: 4px;
+  background: #8a9ab3;
+  transform-origin: left center;
+  transform: scaleX(var(--anteil, 1));
+}
+
+.statistik-nachher .statistik-balken {
+  background: var(--akzent-hell);
+}
+
+.einblendung.quelle {
+  font-size: 0.9375rem;
+  color: var(--text-leise);
+}
+
+.quelle-betrieb {
+  font-weight: 650;
+  color: var(--text);
+}
+
+/* Mit JavaScript: eigene Ebene vor der Bildspur, nur im Fenster von/bis sichtbar.
+   Schmale Bildschirme: Jede Einblendung liegt fest am unteren Rand der Ebene. Sichtbare stapeln sich nach oben,
+   die Höhe darunter setzt einblendungen.mjs als --stapel. Verschoben wird nur über translate, ein- und
+   ausgeblendet nur über opacity, transform und visibility: Andere Karten bewegen sich dadurch nie im Layout. */
+.einblendungen-an .einblendungen {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  gap: 0.5rem;
+  max-width: none;
+  margin: 0;
+  padding: calc(var(--oben-frei) + 0.75rem) calc(var(--rand) + var(--rechts-frei)) calc(var(--unten-frei) + 0.75rem) var(--rand);
+  pointer-events: none;
+}
+
+.einblendungen-an .einblendungen .einblendung {
+  position: absolute;
+  left: var(--rand);
+  right: calc(var(--rand) + var(--rechts-frei));
+  bottom: calc(var(--unten-frei) + 0.75rem);
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(1.25rem);
+  translate: 0 calc(-1 * var(--stapel, 0px));
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 0.6s;
+}
+
+.einblendungen-an .einblendungen .einblendung.an {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), translate 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s;
+}
+
+.einblendungen-an .statistik-balken {
+  transform: scaleX(0);
+  transition: transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s;
+}
+
+.einblendungen-an .statistik.an .statistik-balken {
+  transform: scaleX(var(--anteil, 1));
+}
+
+@starting-style {
+  .einblendungen-an .statistik.an .statistik-balken {
+    transform: scaleX(0);
+  }
+}
+
+/* Start: Starttext bleibt an seinem Platz in der Karte und blendet nur aus */
+.einblendungen-an .hero .einblendung {
+  transition: opacity 0.5s ease, transform 0.6s ease;
+}
+
+.einblendungen-an .hero .einblendung:not(.an) {
+  opacity: 0;
+  transform: translateY(-1rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-delay: 0s !important;
+  }
+}
+
+@media (max-height: 30rem) {
+  .einblendungen-an .einblendungen .einblendung {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .einblendungen-an .einblendungen .einblendung.schriftzug {
+    font-size: 1.125rem;
+  }
+
+  .einblendungen-an .einblendungen .statistik-wert {
+    font-size: 1.0625rem;
+  }
+
+  .einblendungen-an .einblendungen .statistik-zeile {
+    margin-top: 0.2rem;
+  }
+}
+
+/* Ab Desktopbreite: Positionen links, rechts, mitte, oben, unten in einem Raster ohne Überdeckung.
+   Die Regeln gelten nur für die Ebene der Stationen, nicht für die Startkarte (sonst bricht die H1 beim
+   Umschalten auf die Bühne um). */
+@media (min-width: 64rem) {
+  .einblendungen-an .einblendungen {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: 'oben oben oben' 'links mitte rechts' 'unten unten unten';
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .einblendungen-an .einblendungen .einblendung {
+    position: static;
+    display: none;
+    visibility: visible;
+    translate: none;
+    transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), display 0.6s allow-discrete;
+  }
+
+  .einblendungen-an .einblendungen .einblendung.an {
+    display: block;
+    transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), display 0.6s allow-discrete;
+  }
+
+  .einblendungen-an .einblendungen .einblendung[data-position='oben'] {
+    grid-area: oben;
+    justify-self: center;
+    max-width: 48rem;
+    text-align: center;
+  }
+
+  .einblendungen-an .einblendungen .einblendung[data-position='links'] {
+    grid-area: links;
+    justify-self: start;
+    max-width: 26rem;
+  }
+
+  .einblendungen-an .einblendungen .einblendung[data-position='rechts'] {
+    grid-area: rechts;
+    justify-self: end;
+    max-width: 26rem;
+  }
+
+  .einblendungen-an .einblendungen .einblendung[data-position='mitte'] {
+    grid-area: mitte;
+    justify-self: center;
+    max-width: 30rem;
+  }
+
+  .einblendungen-an .einblendungen .einblendung[data-position='unten'] {
+    grid-area: unten;
+    justify-self: center;
+    max-width: 42rem;
+  }
+
+  @starting-style {
+    .einblendungen-an .einblendungen .einblendung.an {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+  }
+}
+
+/* Reduzierte Bewegung, Save-Data oder 2g: alles steht sofort mit Endwert da, auch ohne Verzögerung.
+   Steht nach den Regeln oben und ist spezifischer, damit kein Übergang übrig bleibt. */
+.buehne-ruhig .einblendung,
+.buehne-ruhig .einblendung.an,
+.buehne-ruhig.einblendungen-an .einblendungen .einblendung,
+.buehne-ruhig.einblendungen-an .einblendungen .einblendung.an {
+  transform: none;
+  transition: none;
+}
+
+.buehne-ruhig .statistik-balken {
+  transition: none;
+}
+
+/* ---------- Bühne (mit JavaScript) ---------- */
+
+.buehne {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--buehne);
+  pointer-events: none;
+}
+
+.buehne-flaeche {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.buehne::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(5, 8, 14, 0.55) 100%),
+    linear-gradient(180deg, rgba(11, 17, 27, 0.35) 0%, transparent 22%, transparent 70%, rgba(11, 17, 27, 0.5) 100%);
+}
+
+.buehne-an .hero,
+.buehne-an .station,
+.buehne-an .station:nth-of-type(even) {
+  background: transparent;
+}
+
+.buehne-an .station {
+  padding-top: var(--strecke);
+  border-top: 0;
+  /* Sprung über den Gebäudeplan landet an der Station (Karten ab Bildmitte), nicht am Anfang der Fahrstrecke. */
+  scroll-margin-top: calc(55vh - var(--strecke));
+}
+
+.buehne-an .station > .ebenen {
+  opacity: 0;
+}
+
+/* Das Startbild im HTML bleibt nach dem Umschalten stehen und wird mit dem ersten Stück Fahrt ausgeblendet
+   (Deckkraft aus buehne.mjs). Die Bühne zeichnet dort dasselbe Bild an derselben Stelle, so springt nichts. */
+.buehne-an .hero > .ebenen {
+  opacity: var(--start-deckung, 1);
+  transition: none;
+}
+
+.buehne-an .kopf {
+  max-width: none;
+  padding-inline: max(var(--rand), calc((100% - var(--breite)) / 2 + var(--rand)));
+  background: var(--karte);
+}
+
+/* Übergang von der Bühne in die ruhigen Kapitel: Chefetage läuft in Dunkel aus */
+.buehne-an #chefetage {
+  padding-bottom: 45vh;
+}
+
+.buehne-an #chefetage::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 45vh;
+  background: linear-gradient(180deg, rgba(11, 17, 27, 0), var(--buehne));
+  pointer-events: none;
+}
+
+.buehne-an .kapitel,
+.buehne-an .fuss {
+  background-color: var(--buehne);
+}
+/* ---------- Finale ---------- */
+
+.finale {
+  padding-top: 55svh;
+}
+
+/* Querformat ab 64rem: Die Karte beginnt höher, rund ein Fünftel der Bildhöhe (Gestaltungsbogen). */
+@media (min-width: 64rem) and (min-aspect-ratio: 1/1) {
+  .finale {
+    padding-top: 36svh;
+  }
+}
+
+.finale-flaeche {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.finale > .rahmen {
+  width: calc(100% - 2 * var(--rand));
+  max-width: 68rem;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  background: var(--karte);
+  border-radius: 16px;
+}
+
+/* ---------- Gebäudeplan ---------- */
+
+.gebaeudeplan {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  background: rgba(11, 17, 27, 0.94);
+  border-bottom: 1px solid var(--linie);
+}
+
+.plan-svg {
+  display: block;
+  width: 308px;
+  height: 44px;
+  overflow: visible;
+}
+
+.plan-dach,
+.geschoss-name {
+  display: none;
+}
+
+.geschoss {
+  cursor: pointer;
+}
+
+.geschoss:focus-visible {
+  outline: 3px solid var(--akzent-hell);
+  outline-offset: 1px;
+}
+
+/* Unsichtbare Trefferfläche 44 x 44 je Geschoss (Tippflächen mindestens 44 px). */
+.geschoss-treffer {
+  fill: transparent;
+  stroke: none;
+}
+
+.geschoss-flaeche {
+  fill: rgba(19, 28, 43, 0.95);
+  stroke: var(--linie);
+  stroke-width: 1.5;
+  transition: fill 0.4s ease, stroke 0.4s ease;
+}
+
+.piktogramm {
+  fill: none;
+  stroke: var(--text-leise);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.geschoss:hover .geschoss-flaeche {
+  stroke: var(--akzent-hell);
+}
+
+.geschoss.besucht .geschoss-flaeche {
+  fill: #3b1a0c;
+  stroke: var(--akzent);
+}
+
+.geschoss.besucht .piktogramm {
+  stroke: var(--akzent-hell);
+}
+
+.geschoss.aktiv .geschoss-flaeche {
+  fill: var(--akzent);
+  stroke: var(--akzent-hell);
+  filter: drop-shadow(0 0 6px var(--akzent));
+}
+
+.geschoss.aktiv .piktogramm {
+  stroke: #fff;
+}
+
+.geschoss:focus-visible .geschoss-flaeche {
+  stroke: #fff;
+  stroke-width: 3;
+}
+
+.geschoss[data-ziel='buero'] { transform: translate(0px, 0px); }
+.geschoss[data-ziel='planung'] { transform: translate(44px, 0px); }
+.geschoss[data-ziel='werkstatt'] { transform: translate(88px, 0px); }
+.geschoss[data-ziel='lager'] { transform: translate(132px, 0px); }
+.geschoss[data-ziel='baustelle'] { transform: translate(176px, 0px); }
+.geschoss[data-ziel='dienstleistung'] { transform: translate(220px, 0px); }
+.geschoss[data-ziel='chefetage'] { transform: translate(264px, 0px); }
+
+/* Desktop: schwebend am rechten Rand, Stockwerke von unten (Büro) nach oben (Chefetage) */
+@media (min-width: 80rem) {
+  :root {
+    --oben-frei: 0rem;
+    --rechts-frei: 4.5rem;
+  }
+
+  html {
+    scroll-padding-top: 1rem;
+  }
+
+  .gebaeudeplan {
+    position: fixed;
+    top: 50%;
+    right: 1.25rem;
+    display: block;
+    height: auto;
+    background: none;
+    border: 0;
+    transform: translateY(-50%);
+  }
+
+  .plan-svg {
+    width: 52px;
+    height: 330px;
+  }
+
+  .plan-dach {
+    display: block;
+    fill: none;
+    stroke: var(--text-leise);
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+
+  .geschoss-name {
+    display: block;
+    fill: var(--text);
+    font-family: var(--schrift-titel);
+    font-size: 14px;
+    font-weight: 600;
+    text-anchor: end;
+    paint-order: stroke;
+    stroke: var(--buehne);
+    stroke-width: 5px;
+    stroke-linejoin: round;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .geschoss-name[data-name='buero'] { transform: translate(4px, 282px); }
+  .geschoss-name[data-name='planung'] { transform: translate(4px, 238px); }
+  .geschoss-name[data-name='werkstatt'] { transform: translate(4px, 194px); }
+  .geschoss-name[data-name='lager'] { transform: translate(4px, 150px); }
+  .geschoss-name[data-name='baustelle'] { transform: translate(4px, 106px); }
+  .geschoss-name[data-name='dienstleistung'] { transform: translate(4px, 62px); }
+  .geschoss-name[data-name='chefetage'] { transform: translate(4px, 18px); }
+
+  /* Namen nur bei Zeigen und Fokus. Die aktive Station zeigt das Symbol (aria-current); eine dauerhafte
+     Beschriftung lief in die rechte Einblendungskarte (gemessen bei 1280 und 1440 px Breite). */
+  .plan-svg:has(.geschoss[data-ziel='buero']:is(:hover, :focus-visible)) .geschoss-name[data-name='buero'],
+  .plan-svg:has(.geschoss[data-ziel='planung']:is(:hover, :focus-visible)) .geschoss-name[data-name='planung'],
+  .plan-svg:has(.geschoss[data-ziel='werkstatt']:is(:hover, :focus-visible)) .geschoss-name[data-name='werkstatt'],
+  .plan-svg:has(.geschoss[data-ziel='lager']:is(:hover, :focus-visible)) .geschoss-name[data-name='lager'],
+  .plan-svg:has(.geschoss[data-ziel='baustelle']:is(:hover, :focus-visible)) .geschoss-name[data-name='baustelle'],
+  .plan-svg:has(.geschoss[data-ziel='dienstleistung']:is(:hover, :focus-visible)) .geschoss-name[data-name='dienstleistung'],
+  .plan-svg:has(.geschoss[data-ziel='chefetage']:is(:hover, :focus-visible)) .geschoss-name[data-name='chefetage'] {
+    opacity: 1;
+  }
+
+  .geschoss[data-ziel='buero'] { transform: translate(4px, 282px); }
+  .geschoss[data-ziel='planung'] { transform: translate(4px, 238px); }
+  .geschoss[data-ziel='werkstatt'] { transform: translate(4px, 194px); }
+  .geschoss[data-ziel='lager'] { transform: translate(4px, 150px); }
+  .geschoss[data-ziel='baustelle'] { transform: translate(4px, 106px); }
+  .geschoss[data-ziel='dienstleistung'] { transform: translate(4px, 62px); }
+  .geschoss[data-ziel='chefetage'] { transform: translate(4px, 18px); }
+}
+
+/* ---------- Buchen-Leiste ----------
+   Fest unten auf jeder Seite, mit dem Anmelde-Knopf: Stile in basis.css (gelten auch auf den Unterseiten). */
+
+@media (forced-colors: active) {
+  .einblendung,
+  .karte-kopf,
+  .buchen-leiste {
+    border: 1px solid CanvasText;
+  }
+}

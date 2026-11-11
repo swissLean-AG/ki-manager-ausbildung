@@ -1,0 +1,7 @@
+/* Erzeugt, nicht von Hand ändern. */
+/* Balkenlänge je Kennzahl als Anteil, gelesen von .kennzahl-balken in halte.css. */
+.anteil-25 { --anteil: 0.25; }
+.anteil-30 { --anteil: 0.3; }
+.anteil-75 { --anteil: 0.75; }
+.anteil-80 { --anteil: 0.8; }
+.anteil-90 { --anteil: 0.9; }

@@ -1,0 +1,1498 @@
+/* Basis der KIMA-Startseite: dunkle Bühne "Nacht und Licht", eine Leuchtfarbe, ohne JavaScript vollständig.
+   Spätere Ebenen (buehne.css) legen Bildebenen und Bewegung darüber. Hier steht nur Ruhe. */
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../schrift/montserrat-var.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KIMA Text';
+  src: url('../schrift/sourcesans-var.woff2') format('woff2');
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Ersatzschriften für die Zeit, bis die Hausschriften geladen sind: Arial, auf deren mittlere Zeichenbreite
+   angeglichen (gemessen an deutschem Seitentext, normal und fett). So bricht der Text vor und nach dem Wechsel
+   gleich um und nichts verschiebt sich, auch wenn eine reine Textseite schon vor den Schriften zeichnet. */
+@font-face {
+  font-family: 'Montserrat Ersatz';
+  src: local('Arial'), local('ArialMT');
+  font-weight: 100 599;
+  size-adjust: 113.07%;
+  ascent-override: 85.61%;
+  descent-override: 22.2%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Montserrat Ersatz';
+  src: local('Arial Bold'), local('Arial-BoldMT');
+  font-weight: 600 900;
+  size-adjust: 110.55%;
+  ascent-override: 87.56%;
+  descent-override: 22.7%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'KIMA Text Ersatz';
+  src: local('Arial'), local('ArialMT');
+  font-weight: 100 599;
+  size-adjust: 92.93%;
+  ascent-override: 110.19%;
+  descent-override: 43.04%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'KIMA Text Ersatz';
+  src: local('Arial Bold'), local('Arial-BoldMT');
+  font-weight: 600 900;
+  size-adjust: 91.68%;
+  ascent-override: 111.69%;
+  descent-override: 43.63%;
+  line-gap-override: 0%;
+}
+
+:root {
+  --buehne: #0b111b;
+  --buehne-2: #131c2b;
+  --linie: #26334a;
+  --text: #e8edf5;
+  --text-leise: #a9b8cc;
+  --akzent: #CC3300;
+  --akzent-dunkel: #a82a00;
+  --akzent-hell: #ff7a45;
+  --auf-akzent: #ffffff;
+  --schein: rgba(204, 51, 0, 0.18);
+  --schrift-titel: 'Montserrat', 'Montserrat Ersatz', system-ui, sans-serif;
+  --schrift-text: 'KIMA Text', 'KIMA Text Ersatz', system-ui, sans-serif;
+  --breite: 72rem;
+  --rand: clamp(1.125rem, 4vw, 2.5rem);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--buehne);
+  color: var(--text);
+  font-family: var(--schrift-text);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  overflow-wrap: break-word;
+  /* Silbentrennung im Fliesstext, nur für lange Wörter (lang="de-CH"), wichtig bei grosser Systemschrift auf schmalen
+     Bildschirmen. Titel nehmen sie unten bei .ganz wieder aus. */
+  hyphens: auto;
+  hyphenate-limit-chars: 12 5 5;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--schrift-titel);
+  line-height: 1.15;
+  margin: 0 0 0.6em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(1.875rem, 1.2rem + 3.6vw, 3.75rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 1.1rem + 2vw, 2.5rem);
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 1.125rem;
+  font-weight: 650;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--akzent-hell);
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  color: var(--text);
+}
+
+:focus-visible {
+  outline: 3px solid var(--akzent-hell);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+strong {
+  font-weight: 650;
+  color: var(--text);
+}
+
+/* Skip-Link: erstes fokussierbares Element, erscheint beim Fokus oben links. */
+.skip-link {
+  position: absolute;
+  left: var(--rand);
+  top: 0.5rem;
+  z-index: 100;
+  padding: 0.75rem 1.125rem;
+  background: var(--akzent);
+  color: var(--auf-akzent);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 6px;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: none;
+}
+
+.rahmen {
+  width: 100%;
+  max-width: var(--breite);
+  margin: 0 auto;
+  padding: 0 var(--rand);
+}
+
+.rahmen-schmal {
+  max-width: 52rem;
+}
+
+/* Kopf */
+.kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 0.75rem;
+  max-width: var(--breite);
+  margin: 0 auto;
+  padding: 1rem var(--rand);
+}
+
+.marke {
+  font-family: var(--schrift-titel);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  min-height: 44px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  /* Rechts bleibt Platz für den Menüknopf, der oben rechts im Kopf liegt: Die Marke bricht lieber um. */
+  max-width: calc(100% - 7.5rem);
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.marke-text span {
+  color: var(--akzent-hell);
+}
+
+/* Original-Logo der swissLean AG links neben der Schrift. Feste Höhe und Seitenverhältnis wie die
+   Bildattribute: kein Layoutsprung. Dünner senkrechter Strich zur Schrift. Die Schrift bricht innerhalb ihres Kastens
+   um, das Logo bleibt in der Zeile (kein nowrap-Zwang für die ganze Marke). */
+.marke {
+  flex-wrap: nowrap;
+}
+
+.marke-logo {
+  flex: none;
+  display: block;
+  margin-right: 0.75rem;
+  padding-right: 0.75rem;
+  border-right: 1px solid var(--linie);
+}
+
+.marke-logo img {
+  display: block;
+  height: 1.75rem;
+  width: auto;
+  aspect-ratio: 137 / 28;
+}
+
+.marke-text {
+  min-width: 0;
+}
+
+@media (max-width: 30em) {
+  .marke-logo {
+    margin-right: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .marke-logo img {
+    aspect-ratio: 25 / 28;
+  }
+}
+
+/* Knöpfe, Tippfläche mindestens 44 px */
+.knopf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 48px;
+  padding: 0.75rem 1.375rem;
+  background: var(--akzent);
+  color: var(--auf-akzent);
+  font-family: var(--schrift-titel);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid var(--akzent);
+  border-radius: 6px;
+  box-shadow: 0 0 2rem var(--schein);
+}
+
+.knopf:hover {
+  background: var(--akzent-dunkel);
+  color: var(--auf-akzent);
+}
+
+.knopf-leise {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--linie);
+  box-shadow: none;
+}
+
+.knopf-leise:hover {
+  background: var(--buehne-2);
+  color: var(--text);
+  border-color: var(--akzent-hell);
+}
+
+.knopf-klein {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9375rem;
+}
+
+.knopfreihe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.dachzeile {
+  font-family: var(--schrift-titel);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--akzent-hell);
+  margin-bottom: 0.75rem;
+}
+
+.einleitung {
+  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+  color: var(--text-leise);
+  max-width: 44rem;
+}
+
+/* Sichtbares Stand-Datum auf Startseite, Ausbildung und Fragen; Farbe vom Abschnitt, damit der Kontrast bleibt. */
+.stand-text {
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+}
+
+/* Bildebenen: Ohne Bild bleibt die Fläche dunkel und lesbar. */
+.ebenen {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ebene {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.ebene img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(2.5rem, 8vh, 6rem) 0 clamp(2.5rem, 6vh, 4rem);
+  background:
+    radial-gradient(60rem 30rem at 85% 10%, var(--schein), transparent 70%),
+    linear-gradient(180deg, var(--buehne) 0%, var(--buehne-2) 100%);
+}
+
+.hero-text,
+.hero .plan {
+  position: relative;
+  z-index: 1;
+}
+
+.unterzeile {
+  font-size: clamp(1.1875rem, 1rem + 1vw, 1.625rem);
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+}
+
+.einstiege {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  padding: 0;
+  margin: 0 0 2rem;
+}
+
+.einstiege a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+}
+
+.einstiege a::after {
+  content: '';
+  width: 0.45em;
+  height: 0.45em;
+  margin-left: 0.5em;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-0.15em);
+}
+
+/* Gebäudeplan als Liste: echte Links, auch ohne JavaScript */
+.plan {
+  margin-top: 1rem;
+}
+
+.plan-titel {
+  font-family: var(--schrift-titel);
+  font-weight: 600;
+  color: var(--text-leise);
+  margin-bottom: 0.5rem;
+}
+
+.plan-liste {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+}
+
+.plan-liste a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.5rem 0.875rem;
+  background: rgba(19, 28, 43, 0.85);
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.plan-liste a::before {
+  content: '';
+  flex: none;
+  width: 0.75rem;
+  height: 1rem;
+  border-radius: 2px;
+  background: var(--akzent);
+  box-shadow: 0 0 0.75rem var(--akzent);
+}
+
+.plan-liste a:hover {
+  border-color: var(--akzent-hell);
+}
+
+/* Stationen: ohne JavaScript untereinander, je Station Bild und Halt */
+.station,
+.kapitel {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(3rem, 10vh, 6rem) 0;
+  border-top: 1px solid var(--linie);
+}
+
+.station > .rahmen,
+.kapitel > .rahmen {
+  position: relative;
+  z-index: 1;
+}
+
+.station:nth-of-type(even) {
+  background: linear-gradient(180deg, var(--buehne-2), var(--buehne));
+}
+
+.station-weiter {
+  margin: 1.25rem 0 0;
+}
+
+.station-weiter a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+}
+
+/* Stimmen */
+.stimme {
+  margin: 1.5rem 0 0;
+  padding: 1.25rem 1.375rem 1.25rem 1.5rem;
+  border-left: 3px solid var(--akzent);
+  background: rgba(19, 28, 43, 0.6);
+  border-radius: 0 10px 10px 0;
+}
+
+.stimme blockquote {
+  margin: 0;
+}
+
+.stimme blockquote p {
+  font-size: 1.125rem;
+  line-height: 1.5;
+  margin: 0 0 0.75rem;
+}
+
+.stimme figcaption {
+  font-size: 0.9375rem;
+  color: var(--text-leise);
+}
+
+.stimme-text {
+  border-left-style: dashed;
+}
+
+.stimmen-raster {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  gap: 1rem;
+}
+
+.stimmen-raster .stimme {
+  margin: 0;
+}
+
+/* Ausbildung */
+.eckdaten {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.75rem;
+  margin: 2rem 0;
+}
+
+.eckdaten div {
+  padding: 1rem 1.125rem;
+  background: var(--buehne-2);
+  border: 1px solid var(--linie);
+  border-radius: 10px;
+}
+
+.eckdaten dt {
+  font-family: var(--schrift-titel);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--akzent-hell);
+  margin-bottom: 0.25rem;
+}
+
+.eckdaten dd {
+  margin: 0;
+}
+
+.stufen,
+.liste,
+.schritte {
+  padding-left: 1.4em;
+  margin: 0 0 2rem;
+  max-width: 48rem;
+}
+
+.stufen li,
+.liste li,
+.schritte li {
+  margin-bottom: 0.625rem;
+  padding-left: 0.25em;
+}
+
+.stufen li::marker,
+.schritte li::marker {
+  color: var(--akzent-hell);
+  font-family: var(--schrift-titel);
+  font-weight: 700;
+}
+
+.liste li::marker {
+  color: var(--akzent-hell);
+}
+
+.zielgruppen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.zielgruppe {
+  padding: 1.25rem 1.375rem;
+  background: var(--buehne-2);
+  border: 1px solid var(--linie);
+  border-top: 3px solid var(--akzent);
+  border-radius: 10px;
+  scroll-margin-top: 1rem;
+}
+
+.zielgruppe p {
+  margin: 0;
+  color: var(--text-leise);
+}
+
+/* Fragen und Antworten */
+details {
+  border-bottom: 1px solid var(--linie);
+}
+
+summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 48px;
+  padding: 0.875rem 0;
+  font-family: var(--schrift-titel);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary::after {
+  content: '';
+  flex: none;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-right: 2px solid var(--akzent-hell);
+  border-bottom: 2px solid var(--akzent-hell);
+  transform: rotate(45deg);
+}
+
+details[open] summary::after {
+  transform: rotate(-135deg);
+}
+
+details p {
+  color: var(--text-leise);
+  padding-bottom: 1rem;
+  margin: 0;
+}
+
+/* Finale */
+.finale {
+  background:
+    radial-gradient(50rem 26rem at 50% 0%, var(--schein), transparent 70%),
+    var(--buehne);
+}
+
+.schlusszeile {
+  font-size: clamp(1.875rem, 1.2rem + 3.2vw, 3.5rem);
+  max-width: 22ch;
+}
+
+.personen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.person {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.person p {
+  margin: 0;
+  min-width: 0;
+  color: var(--text-leise);
+}
+
+/* Porträts der Gesprächspersonen: feste Masse (80 x 80 im HTML), rund zugeschnitten, kein Verschieben beim Laden. */
+.portrait-rahmen {
+  flex: none;
+  display: block;
+  line-height: 0;
+}
+
+.portrait {
+  display: block;
+  width: 5rem;
+  height: 5rem;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+  background: var(--buehne-2);
+  border: 2px solid var(--akzent);
+}
+
+.hinweis {
+  font-size: 0.9375rem;
+  color: var(--text-leise);
+  max-width: 44rem;
+}
+
+/* Linkliste der Fehlerseite: jeder Link eine Tippfläche von mindestens 44 px Höhe, wie alle Bedienziele, und nur so
+   breit wie sein Text, damit Klickfläche und Fokusrahmen nicht über die ganze Liste reichen. */
+.wegliste {
+  margin: 0 0 1.5rem;
+}
+
+.wegliste a {
+  display: block;
+  width: fit-content;
+  min-height: 44px;
+  padding: 0.55rem 0;
+}
+
+/* Fuss */
+.fuss {
+  border-top: 1px solid var(--linie);
+  padding: 2rem 0 2.5rem;
+  font-size: 0.9375rem;
+  color: var(--text-leise);
+}
+
+.fuss-raster {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+
+.fuss-firma {
+  margin: 0;
+}
+
+.fuss-links {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.25rem;
+  padding: 0;
+  margin: 0;
+}
+
+.fuss-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+/* Unterseiten (Datenschutz, Impressum) */
+.textseite {
+  padding: clamp(2rem, 6vh, 4rem) 0 clamp(3rem, 8vh, 5rem);
+}
+
+.textseite h2 {
+  font-size: clamp(1.25rem, 1.1rem + 0.8vw, 1.625rem);
+  margin-top: 2rem;
+}
+
+.textseite p,
+.textseite li {
+  color: var(--text-leise);
+  max-width: 46rem;
+}
+
+.textseite address {
+  font-style: normal;
+  color: var(--text-leise);
+  margin-bottom: 1em;
+}
+
+.link-start {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+}
+
+/* Unterseiten Ausbildung und Fragen: dieselbe Nacht, ruhigeres Licht, keine Bewegung */
+.unterseite-kopf {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(1rem, 3vh, 2rem) 0 clamp(2.5rem, 7vh, 4.5rem);
+  background:
+    radial-gradient(48rem 24rem at 88% 0%, var(--schein), transparent 70%),
+    linear-gradient(180deg, var(--buehne) 0%, var(--buehne-2) 100%);
+  border-bottom: 1px solid var(--linie);
+}
+
+/* Sieben Fenster, einige erleuchtet: das Gebäude der Startseite als ruhiges Zeichen */
+.fenster {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0 0 1.75rem;
+}
+
+.fenster span {
+  width: 1.25rem;
+  height: 1.625rem;
+  border-radius: 2px;
+  background: var(--buehne-2);
+  border: 1px solid var(--linie);
+}
+
+.fenster span.an {
+  background: var(--akzent);
+  border-color: var(--akzent-hell);
+  box-shadow: 0 0 0.9rem var(--akzent);
+}
+
+.brotkrumen ol {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.5rem;
+  padding: 0;
+  margin: 0 0 1rem;
+  font-size: 0.9375rem;
+  color: var(--text-leise);
+}
+
+.brotkrumen li {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.brotkrumen li + li::before {
+  content: '/';
+  margin-right: 0.5rem;
+  color: var(--text-leise);
+}
+
+.brotkrumen a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.abschnitt {
+  padding: clamp(2.25rem, 7vh, 4rem) 0;
+  border-top: 1px solid var(--linie);
+  scroll-margin-top: 1rem;
+}
+
+.unterseite-kopf + .abschnitt {
+  border-top: 0;
+}
+
+.abschnitt > .rahmen > p,
+.abschnitt > .rahmen > ul,
+.abschnitt > .rahmen > ol {
+  max-width: 46rem;
+}
+
+.abschnitt .stimme {
+  max-width: 46rem;
+}
+
+/* Schmale Handys: der Kopf zeigt nur die Marke, der Buchungsknopf steht direkt darunter im Hero */
+@media (max-width: 25rem) {
+  .kopf .knopf-klein {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .knopf,
+  .stimme {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* Wörter mit Bindestrich in Titeln nicht trennen, "KI-" bleibt nie allein am Zeilenende. */
+.ganz {
+  white-space: nowrap;
+}
+
+/* Schmale Bildschirme, gemessen in Schriftgrössen (em in Medienabfragen folgt der Systemschrift: bei 16 px unter
+   480 px, bei 24 px unter 720 px): Als Block in der Zeile wandert das ganze Wort weiter auf die nächste Zeile. Nur
+   wenn es allein breiter ist als die Zeile, begrenzt max-width den Block und das Wort bricht innen um, statt über den
+   Rand zu laufen. In Knöpfen (Flex) schrumpft es nicht unter seine ganze Breite, höchstens auf die des Knopfs. */
+@media (max-width: 29.99em) {
+  .ganz {
+    display: inline-block;
+    flex-shrink: 0;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: break-word;
+    text-decoration: inherit;
+  }
+}
+
+/* Silbentrennung nur im Fliesstext: Titel und Wortpaare trennen nicht automatisch. */
+h1,
+h2,
+h3,
+.ganz {
+  hyphens: manual;
+}
+
+/* ---------- Menü im Kopf: nur was beim ersten Bild sichtbar ist ----------
+   Ohne JavaScript über details und summary bedienbar. Tafel, offenes Handy-Menü und Fuss stehen in menue.css am Ende
+   des Körpers; beim Laden sind sie verborgen oder weit unten. Das Skript schliesst nur. */
+
+:root {
+  --kurve: cubic-bezier(0.2, 0, 0.2, 1);
+  --menue-grund: #EEEEED;
+  --menue-text: #161b24;
+  --menue-akzent: #a82a00;
+}
+
+.kopf {
+  position: relative;
+  z-index: 50;
+}
+
+.menue {
+  order: 3;
+  flex: 1 0 100%;
+}
+
+.menue details {
+  border-bottom: 0;
+}
+
+.menue-klapp > summary,
+.menue-unter > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.menue-klapp > summary::-webkit-details-marker,
+.menue-unter > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Menüknopf: oben rechts im Kopf, Tippfläche mindestens 44 px */
+.menue-knopf {
+  position: absolute;
+  top: 1rem;
+  right: var(--rand);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  background: var(--buehne-2);
+  color: var(--text);
+  font-family: var(--schrift-titel);
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.menue-knopf::after {
+  display: none;
+}
+
+/* Enger Kopf (schmales Handy, auch bei grosser Systemschrift, da in rem): nur das Symbol, der Name "Menü" bleibt für
+   Vorlesegeräte erhalten. */
+@media (max-width: 30rem) {
+  .marke {
+    max-width: calc(100% - 4rem);
+  }
+
+  .menue-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .menue-knopf {
+    gap: 0;
+  }
+}
+
+.menue-knopf:hover {
+  border-color: var(--akzent-hell);
+}
+
+.menue-symbol,
+.menue-symbol::before,
+.menue-symbol::after {
+  display: block;
+  width: 1.125rem;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+  transition: transform 0.25s var(--kurve), background-color 0.25s var(--kurve);
+}
+
+.menue-symbol {
+  position: relative;
+}
+
+.menue-symbol::before,
+.menue-symbol::after {
+  content: '';
+  position: absolute;
+  left: 0;
+}
+
+.menue-symbol::before {
+  top: -6px;
+}
+
+.menue-symbol::after {
+  top: 6px;
+}
+
+.menue-klapp[open] .menue-symbol {
+  background: transparent;
+}
+
+.menue-klapp[open] .menue-symbol::before {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.menue-klapp[open] .menue-symbol::after {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.menue-liste {
+  list-style: none;
+  margin: 0.75rem 0 0.5rem;
+  padding: 0;
+  border-top: 1px solid var(--linie);
+}
+
+.menue-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0.5rem 0.25rem;
+  color: var(--text);
+  font-family: var(--schrift-titel);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  text-decoration: none;
+}
+
+.menue-link:hover,
+.menue-link[aria-current='page'],
+.menue-link.aktiv {
+  color: var(--akzent-hell);
+}
+
+.menue-unter > summary::after {
+  content: '';
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin: 0 0.35rem 0.25rem 0.75rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.25s var(--kurve);
+}
+
+.menue-unter[open] > summary::after {
+  transform: translateY(0.25rem) rotate(-135deg);
+}
+
+.menue-buchen {
+  display: none !important;
+}
+
+/* Breiter Bildschirm: Punkte nebeneinander. Nur wo der Browser den Inhalt eines geschlossenen details zeigen kann;
+   sonst bleibt der Menüknopf. */
+@media (min-width: 64rem) {
+  @supports selector(::details-content) {
+    .kopf {
+      flex-wrap: nowrap;
+    }
+
+    .menue {
+      order: 0;
+      flex: 0 1 auto;
+      margin-left: auto;
+    }
+
+    .menue-klapp::details-content {
+      content-visibility: visible;
+    }
+
+    .menue-knopf,
+    .menue-buchen-handy {
+      display: none;
+    }
+
+    .menue-buchen {
+      display: inline-flex !important;
+      flex: none;
+    }
+
+    .menue-liste {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      margin: 0;
+      border: 0;
+    }
+
+    .menue-liste > li {
+      border: 0;
+    }
+
+    .menue-link {
+      position: relative;
+      min-height: 44px;
+      padding: 0.5rem 0.875rem;
+      font-size: 0.9375rem;
+      border-radius: 6px;
+    }
+
+    /* Unterstreichung in der Leuchtfarbe, wächst bei Zeigen und Fokus */
+    .menue-link::before {
+      content: '';
+      position: absolute;
+      left: 0.875rem;
+      right: 0.875rem;
+      bottom: 0.4rem;
+      height: 2px;
+      background: var(--akzent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s var(--kurve);
+    }
+
+    .menue-link:hover::before,
+    .menue-link:focus-visible::before,
+    .menue-link[aria-current='page']::before,
+    .menue-link.aktiv::before,
+    .menue-unter[open] > .menue-link::before {
+      transform: scaleX(1);
+    }
+
+    /* Ohne Skript: Tafel nur, solange Zeiger oder Fokus im Untermenü sind, damit sie nichts dauerhaft verdeckt. */
+    html:not(.menue-js) .menue-unter:not(:focus-within):not(:hover) > .menue-panel {
+      display: none;
+    }
+  }
+}
+
+/* ---------- Feste Leiste unten: Infogespräch und Anmelden ----------
+   Auf jeder Seite immer sichtbar. Links die zwei Buchungslinks fürs Infogespräch, rechts der
+   Anmelde-Knopf zur neutralen Empfehlungsseite, grösser und auffälliger als alles andere in der Leiste. Die Höhe der
+   Leiste steht in --leiste-hoehe; Halte, Einblendungen, Startkarte und Fuss halten über --unten-frei und diese Variable
+   Abstand. Breitenstufen in rem, damit sie der Systemschrift folgen:
+     ab 72rem   ganzer Text der Buchungslinks ("Infogespräch per Teams buchen")
+     ab 46rem   "Teams buchen", "Telefon buchen"
+     ab 21.5rem nur "Teams" und "Telefon" unter dem Zeichen, alles in einer Zeile
+     darunter   zwei Zeilen (sehr schmales Handy oder sehr grosse Schrift), die Leiste wird höher
+   Vorlesegeräte hören immer den ganzen Namen. Bewegung nur über transform und opacity, ohne Verschiebung im Layout. */
+
+:root {
+  --leiste-hoehe: calc(4.25rem + env(safe-area-inset-bottom, 0px));
+}
+
+html {
+  scroll-padding-bottom: calc(var(--leiste-hoehe) + 1.25rem);
+}
+
+/* Der Fuss endet über der Leiste. */
+.fuss {
+  padding-bottom: calc(2.5rem + var(--leiste-hoehe));
+}
+
+.nur-vorlesen {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.buchen-leiste {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.375rem 0.625rem;
+  min-height: var(--leiste-hoehe);
+  /* Rechts der Platz des Gebäudeplans (ab 80rem fest am rechten Rand der Startseite), sonst läuft der Knopf darunter. */
+  padding: 0.4375rem calc(var(--rand) + var(--rechts-frei, 0rem)) calc(0.4375rem + env(safe-area-inset-bottom, 0px)) var(--rand);
+  background: rgba(11, 17, 27, 0.95);
+  border-top: 1px solid var(--linie);
+}
+
+.buchen-leiste .knopf {
+  flex: none;
+  column-gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9375rem;
+}
+
+.leiste-buchung .leiste-text {
+  white-space: nowrap;
+}
+
+.leiste-zeichen,
+.anmelde-pfeil {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.leiste-zeichen {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--akzent-hell);
+}
+
+/* Anmelde-Knopf: CI RotOrange mit Verlauf ins Dunkle (jede Stelle hat mit Weiss mindestens den Kontrast von #CC3300),
+   heller Innenrand oben, Schein nach aussen. Zwei Ebenen für die Bewegung: ::before leuchtet kurz auf, ::after ist der
+   Glanzstreifen. Beide liegen hinter dem Text. */
+.buchen-leiste .anmelde-knopf {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  grid-template-areas: 'haupt pfeil' 'unter pfeil';
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 0.875rem;
+  row-gap: 0.0625rem;
+  min-width: 17rem;
+  min-height: 3.25rem;
+  max-width: none;
+  padding: 0.375rem 1.125rem 0.375rem 1.375rem;
+  text-align: left;
+  color: #fff;
+  background-color: var(--akzent);
+  background-image: linear-gradient(115deg, #8f2400 0%, #b02c00 30%, var(--akzent) 62%, var(--akzent) 100%);
+  border: 1px solid rgba(255, 122, 69, 0.75);
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 0 1.5rem rgba(204, 51, 0, 0.45), 0 0.375rem 1rem rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s var(--kurve);
+}
+
+.anmelde-haupt {
+  grid-area: haupt;
+  font-family: var(--schrift-titel);
+  font-size: 1.125rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+}
+
+.anmelde-unter {
+  grid-area: unter;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+.anmelde-pfeil {
+  grid-area: pfeil;
+  width: 1.375rem;
+  height: 1.375rem;
+  stroke-width: 2.2;
+  transition: transform 0.25s var(--kurve);
+}
+
+.anmelde-knopf::before,
+.anmelde-knopf::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Aufleuchten: weicher heller Kern, sonst unsichtbar. */
+.anmelde-knopf::before {
+  background: radial-gradient(ellipse at 50% 40%, rgba(255, 178, 122, 0.55), rgba(255, 178, 122, 0) 70%);
+  opacity: 0;
+  animation: anmelde-leuchten 1.6s ease-in-out 0.9s 1 both;
+}
+
+/* Glanzstreifen: wandert einmal schräg über den Knopf, steht sonst ausserhalb. */
+.anmelde-knopf::after {
+  background: linear-gradient(105deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.34) 50%, rgba(255, 255, 255, 0) 70%);
+  transform: translateX(-110%);
+  animation: anmelde-glanz 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.9s 1 both;
+}
+
+/* Startseite: Sobald die Fahrt läuft, glänzt der Knopf an jedem neuen Halt einmal (neuer Name startet die Animation
+   neu), dazwischen ruht er. */
+.fahrt-gestartet .anmelde-knopf::before,
+.fahrt-gestartet .anmelde-knopf::after {
+  animation-name: none;
+}
+
+.fahrt-gestartet .betrieb:has(.halt.an) .anmelde-knopf::before {
+  animation-name: anmelde-leuchten-halt;
+  animation-delay: 0.3s;
+}
+
+.fahrt-gestartet .betrieb:has(.halt.an) .anmelde-knopf::after {
+  animation-name: anmelde-glanz-halt;
+  animation-delay: 0.3s;
+}
+
+@keyframes anmelde-glanz {
+  from { transform: translateX(-110%); }
+  to { transform: translateX(110%); }
+}
+
+@keyframes anmelde-glanz-halt {
+  from { transform: translateX(-110%); }
+  to { transform: translateX(110%); }
+}
+
+@keyframes anmelde-leuchten {
+  0%, 100% { opacity: 0; }
+  45% { opacity: 1; }
+}
+
+@keyframes anmelde-leuchten-halt {
+  0%, 100% { opacity: 0; }
+  45% { opacity: 1; }
+}
+
+.buchen-leiste .anmelde-knopf:hover,
+.buchen-leiste .anmelde-knopf:focus-visible {
+  color: #fff;
+  background-color: var(--akzent);
+  background-image: linear-gradient(115deg, #8f2400 0%, #b02c00 30%, var(--akzent) 62%, var(--akzent) 100%);
+  transform: translateY(-2px);
+}
+
+.anmelde-knopf:hover .anmelde-pfeil,
+.anmelde-knopf:focus-visible .anmelde-pfeil {
+  transform: translateX(3px);
+}
+
+.buchen-leiste .anmelde-knopf:focus-visible {
+  border-radius: 10px;
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+.buchen-leiste .leiste-buchung:hover .leiste-zeichen {
+  color: var(--text);
+}
+
+/* Breite Bildschirme: Die Buchungslinks tragen den ganzen Text, der Anmelde-Knopf wird entsprechend breiter. */
+@media (min-width: 72rem) {
+  .buchen-leiste .anmelde-knopf {
+    min-width: 21rem;
+    padding-left: 1.625rem;
+  }
+
+  .anmelde-haupt {
+    font-size: 1.25rem;
+  }
+
+  .anmelde-unter {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 71.99rem) {
+  .leiste-buchung .lang {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+/* Handy (auch quer): eine Zeile, Anmelden füllt den Platz, die Buchungslinks zeigen Zeichen und Wort übereinander. */
+@media (max-width: 45.99rem) {
+  .buchen-leiste {
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    gap: 0.375rem;
+    padding-inline: 0.5rem;
+  }
+
+  .buchen-leiste .leiste-buchung {
+    flex-direction: column;
+    row-gap: 0.125rem;
+    padding: 0.25rem 0.4375rem;
+    font-size: 0.8125rem;
+    line-height: 1.1;
+  }
+
+  .leiste-buchung .kurz {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .buchen-leiste .anmelde-knopf {
+    flex: 1 1 auto;
+    min-width: 0;
+    column-gap: 0.375rem;
+    padding-inline: 0.625rem 0.5rem;
+  }
+
+  .anmelde-haupt {
+    font-size: 1rem;
+  }
+
+  .anmelde-unter {
+    font-size: 0.6875rem;
+    letter-spacing: 0;
+  }
+
+  .anmelde-pfeil {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+}
+
+/* Sehr schmal (gemessen in Schriftgrössen, also auch bei sehr grosser Systemschrift): zwei Zeilen, oben die
+   Buchungslinks nebeneinander, unten Anmelden über die ganze Breite. */
+@media (max-width: 21.49rem) {
+  :root {
+    --leiste-hoehe: calc(7.375rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .buchen-leiste {
+    flex-wrap: wrap;
+  }
+
+  .buchen-leiste .leiste-buchung {
+    flex: 1 1 0;
+    flex-direction: row;
+    column-gap: 0.375rem;
+  }
+
+  .buchen-leiste .anmelde-knopf {
+    flex: 1 1 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anmelde-knopf::before,
+  .anmelde-knopf::after {
+    animation: none !important;
+  }
+
+  .buchen-leiste .anmelde-knopf:hover,
+  .buchen-leiste .anmelde-knopf:focus-visible,
+  .anmelde-knopf:hover .anmelde-pfeil,
+  .anmelde-knopf:focus-visible .anmelde-pfeil {
+    transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .buchen-leiste {
+    border: 1px solid CanvasText;
+  }
+
+  .anmelde-knopf::before,
+  .anmelde-knopf::after {
+    display: none;
+  }
+}

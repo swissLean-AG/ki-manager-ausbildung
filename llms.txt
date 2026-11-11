@@ -1,0 +1,28 @@
+# KI-Manager-Ausbildung der swissLean AG
+
+> Praxisausbildung für Schweizer KMU: In rund drei Monaten und sechs Online-Sessions baut eine Person aus dem Betrieb eigene KI-Werkzeuge und KI-Agenten für die eigenen Abläufe. Anbieterin ist die swissLean AG in Pfäffikon SZ, gegründet 2011, begleitet KMU mit Prozessanalyse, Lean Management, Automatisierung und KI. Kosten auf Anfrage im Informationsgespräch.
+
+Stand: 11.11.2026. Alle Inhalte auf Deutsch (Schweiz). Zahlen auf den Seiten sind belegt oder als Erfahrungswert bzw. Einschätzung der swissLean AG gekennzeichnet, Angaben von Teilnehmenden sind als ihre eigenen Angaben ausgewiesen.
+
+## Ausbildung
+
+- [Startseite](https://ki-manager-ausbildung.ch/): Von der Anfrage bis zur Schlussrechnung: wo KI im Hauptprozess eines Betriebs Zeit zurückgibt und wie du dein KI-Betriebssystem baust, mit Stimmen von Teilnehmenden und Buchung des Infogesprächs.
+- [Ausbildung](https://ki-manager-ausbildung.ch/ausbildung/): Aufbau, Inhalte, Ablauf und Leitung der KI-Manager-Ausbildung.
+- [Fragen und Antworten](https://ki-manager-ausbildung.ch/fragen/): Antworten für Chefs und Mitarbeitende zu Ablauf, Technik, Datenschutz und Abschluss.
+
+## Leistungen der swissLean AG
+
+- [Alle Leistungen im Überblick](https://ki-manager-ausbildung.ch/leistungen/): Acht Leistungen in der Reihenfolge erst verstehen, dann vereinfachen, dann automatisieren, dann KI.
+- [Prozessanalyse](https://ki-manager-ausbildung.ch/leistungen/prozessanalyse/): Einen Ablauf Schritt für Schritt aufnehmen, den Engpass mit Ursachen finden, Massnahmen mit Verantwortung und Termin festlegen.
+- [Lean Management](https://ki-manager-ausbildung.ch/leistungen/lean-management/): Ein Verbesserungssystem mit Jahreszielen, wöchentlichen Teamgesprächen, Kennzahlen und Audits, mit dem das Team Verschwendung selbst abbaut.
+- [Automatisierung](https://ki-manager-ausbildung.ch/leistungen/automatisierung/): Vorhandene Systeme wie ERP, Tabellen und Mail verbinden, damit Daten nicht mehr von Hand übertragen werden, mit Dashboard und Übergabe an das interne Team.
+- [KI-Ausbildung](https://ki-manager-ausbildung.ch/ausbildung/): Die KI-Manager-Ausbildung: sechs Online-Sessions in rund drei Monaten, in denen eine Person aus dem Betrieb eigene KI-Werkzeuge baut.
+- [KI-Implementierung](https://ki-manager-ausbildung.ch/leistungen/ki-implementierung/): Die swissLean AG baut mit dem Betrieb eine KI-Plattform auf den eigenen Daten, setzt sie an einem Leuchtturmprojekt ein und übergibt sie dem Team.
+- [KI-Betriebssystem](https://ki-manager-ausbildung.ch/leistungen/ki-betriebssystem/): Was ein KI-Betriebssystem ist: ein KI-System, das Firmenwissen, Abläufe und Regeln kennt und wiederkehrende Aufgaben nach festem Standard erledigt.
+- [Digitale Transformation](https://ki-manager-ausbildung.ch/leistungen/digitale-transformation/): Wegweiser für die Digitalisierung im KMU: sehen, vereinfachen, verbinden, KI einsetzen, mit der passenden Leistung zu jedem Schritt.
+- [Strategische Beratung](https://ki-manager-ausbildung.ch/leistungen/strategische-beratung/): Mit der Geschäftsleitung Nordstern, Jahresziele und Roadmap festlegen und jedes Jahr in einem Zielworkshop überprüfen.
+
+## Rechtliches
+
+- [Datenschutz](https://ki-manager-ausbildung.ch/datenschutz/): Welche Daten beim Besuch und bei der Buchung anfallen.
+- [Impressum](https://ki-manager-ausbildung.ch/impressum/): Anbieterin und Kontakt.
