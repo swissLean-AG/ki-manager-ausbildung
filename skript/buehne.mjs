@@ -3,7 +3,9 @@
 //
 // - Natives Scrollen, nur passive scroll- und resize-Lauscher, kein Mausrad- oder Touch-Lauscher.
 // - Laden je Abschnitt: aktueller und der nächste in Fahrtrichtung (rückwärts gescrollt der vorherige), nie mehr.
-//   Im aktuellen Abschnitt zuerst die acht Bilder ab der Lage in Fahrtrichtung, dann grob vor fein.
+//   Im aktuellen Abschnitt zuerst die acht Bilder ab der Lage in Fahrtrichtung, dann grob vor fein. Der nächste
+//   startet bei halb geladenem aktuellem Abschnitt; beide teilen sich PARALLEL Anfragen, der aktuelle zuerst.
+//   Die Ladereihenfolge ändert nur, wann ein Bild da ist, nie welches Bild an welcher Lage gezeigt wird.
 // - Jedes Bild wird mit img.decode() decodiert, bevor es gezeigt wird. Fehlt ein Bild, bleibt das letzte stehen.
 // - Reduzierte Bewegung, Save-Data, 2g oder slow-2g: keine Fahrtbilder, nur Überblendung der Schlüsselbilder.
 //   Auf 3g läuft die Fahrt mit der kleineren Bildstufe.
@@ -26,7 +28,14 @@
 import { klemme, beiBewegung } from './fortschritt.mjs';
 
 export const REIHE = ['start', 'buero', 'planung', 'werkstatt', 'lager', 'baustelle', 'dienstleistung', 'chefetage'];
-const PARALLEL = 4;
+// Gleichzeitige Anfragen der Bühne insgesamt (aktueller und nächster Abschnitt zusammen). Sechs statt vier
+// verkürzen den Leerlauf der Leitung zwischen den Anfragen.
+export const PARALLEL = 6;
+// Der nächste Abschnitt startet, sobald dieser Anteil des aktuellen geladen ist (vorher erst bei 100 %).
+export const NACHBAR_AB = 0.5;
+// Plätze des nächsten Abschnitts, solange der aktuelle noch Bilder anzufragen hat: Der aktuelle behält den
+// Grossteil der Leitung, weil seine Bilder beim Scrollen zuerst gebraucht werden.
+export const NACHBAR_PLAETZE = 2;
 // Anteil der Finalfahrt chefetage-finale, den die Bühne nach der Chefetage selbst fährt; das Finale beginnt dort.
 export const FINALE_VORLAUF = 0.2;
 const RAND = 0.06; // Anteil am Anfang und Ende einer Fahrt, in dem Schlüsselbild und Fahrt ineinander übergehen
@@ -292,12 +301,38 @@ export function starteBuehne(wurzel, optionen = {}) {
     return laeuft;
   }
 
+  // Laufende Anfragen aller behaltenen Abschnitte; verworfene zählen nicht mehr (verwirf leert ihr laufend).
+  function offenAlle() {
+    let n = 0;
+    for (const e of cache.values()) n += e.laufend.size;
+    return n;
+  }
+
+  // Freie Plätze verteilen: zuerst an den aktuellen Abschnitt, dann an den nächsten.
+  function verteile() {
+    if (gestoppt) return;
+    const { k } = lage();
+    const reihe = [...cache.values()].filter((e) => e.weiter && !e.fertig && !e.abgebrochen);
+    reihe.sort((x, y) => (y.k === k) - (x.k === k));
+    for (const e of reihe) e.weiter();
+  }
+
+  // Höchstzahl eigener Anfragen eines Abschnitts, solange beide noch unangefragte Bilder haben: der nächste
+  // NACHBAR_PLAETZE, der aktuelle den Rest. Hat nur einer noch Bilder offen, bekommt er alle Plätze.
+  function plaetzeFuer(eintrag) {
+    const { k } = lage();
+    const andere = [...cache.values()].some((e) => e !== eintrag && !e.abgebrochen && !e.fertig && e.offen());
+    if (!andere) return PARALLEL;
+    return eintrag.k === k ? PARALLEL - NACHBAR_PLAETZE : NACHBAR_PLAETZE;
+  }
+
   function ladeAbschnitt(k) {
     const a = abschnittFuer(k);
     if (!a || reduziert || cache.has(a.id)) return;
     const variante = waehleVariante(a);
     const urls = fahrtBilder(a, basis, variante);
     const eintrag = {
+      k,
       variante,
       urls,
       bilder: new Array(urls.length).fill(null),
@@ -305,7 +340,10 @@ export function starteBuehne(wurzel, optionen = {}) {
       fertig: false,
       abgebrochen: false,
       fehler: 0,
+      geladen: 0,
       laufend: new Set(),
+      weiter: null,
+      offen: () => false,
     };
     ersatz.delete(a.id);
     cache.set(a.id, eintrag);
@@ -316,16 +354,19 @@ export function starteBuehne(wurzel, optionen = {}) {
     const folge = ladeReihenfolge(urls.length, ab, jetzt.k === k ? richtung : k < jetzt.k ? -1 : 1);
     let naechster = 0;
     let offen = 0;
+    eintrag.offen = () => naechster < folge.length;
     const weiter = () => {
-      if (eintrag.abgebrochen) return;
+      if (eintrag.abgebrochen || eintrag.fertig) return;
       if (naechster >= folge.length && offen === 0) {
         eintrag.fertig = true;
         eintrag.ersatz = null;
         meldeGeladen();
         nachladen();
+        verteile();
         return;
       }
-      while (offen < PARALLEL && naechster < folge.length) {
+      const plaetze = plaetzeFuer(eintrag);
+      while (offen < plaetze && offenAlle() < PARALLEL && naechster < folge.length) {
         const i = folge[naechster++];
         offen++;
         const img = new Image();
@@ -336,6 +377,7 @@ export function starteBuehne(wurzel, optionen = {}) {
           () => {
             if (!eintrag.abgebrochen) {
               eintrag.bilder[i] = img;
+              eintrag.geladen++;
               plan.plane();
             }
           },
@@ -345,10 +387,12 @@ export function starteBuehne(wurzel, optionen = {}) {
         ).finally(() => {
           eintrag.laufend.delete(img);
           offen--;
-          weiter();
+          if (!eintrag.abgebrochen) weiter();
+          verteile();
         });
       }
     };
+    eintrag.weiter = weiter;
     weiter();
   }
 
@@ -363,8 +407,8 @@ export function starteBuehne(wurzel, optionen = {}) {
     canvas.dataset.geladen = [...cache].filter(([, e]) => e.fertig && e.fehler < e.urls.length).map(([id]) => id).join(',');
   }
 
-  // Nur der aktuelle und der nächste Abschnitt in Fahrtrichtung bleiben im Speicher; geladen wird der Nachbar
-  // erst nach dem aktuellen.
+  // Nur der aktuelle und der nächste Abschnitt in Fahrtrichtung bleiben im Speicher; geladen wird der Nachbar,
+  // sobald der aktuelle zu NACHBAR_AB geladen ist (mit NACHBAR_PLAETZE, bis der aktuelle alles angefragt hat).
   function nachladen() {
     if (gestoppt || !manifest || reduziert) return;
     const { k } = lage();
@@ -380,7 +424,10 @@ export function starteBuehne(wurzel, optionen = {}) {
     meldeGeladen();
     const aktuell = abschnittFuer(k);
     if (aktuell && !cache.has(aktuell.id)) ladeAbschnitt(k);
-    else if (!aktuell || cache.get(aktuell.id)?.fertig) ladeAbschnitt(nachbar);
+    else {
+      const e = aktuell ? cache.get(aktuell.id) : null;
+      if (!e || e.fertig || e.geladen >= e.urls.length * NACHBAR_AB) ladeAbschnitt(nachbar);
+    }
   }
 
   // Passt die geladene Variante nicht mehr zur Fenstergrösse, wird der Abschnitt neu geladen. Die bisherigen

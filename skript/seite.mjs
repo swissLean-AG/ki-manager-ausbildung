@@ -109,10 +109,15 @@ function halteMitte(gemerkt) {
 }
 
 // Einflug ohne Wartezeit: Nach dem Laden, sobald das Startbild gemalt ist, und im Leerlauf die Module und die
-// ersten acht Bilder der Fahrt start-buero in den Zwischenspeicher holen, damit der erste Scroll sofort fährt.
-// Erst nach dem Startbild, damit nichts davon mit dem grössten Bild (LCP) um die Leitung konkurriert.
-// Keine Bilder bei reduzierter Bewegung, Save-Data oder 2g (auf 3g die kleinere Stufe), und nicht, wenn die Bühne schon läuft.
+// Bilder der Fahrt start-buero in den Zwischenspeicher holen, damit der erste Scroll sofort fährt. Reihenfolge
+// grob vor fein (Anfang, Ende, jedes 8., 4., 2., dann jedes Bild, wie die Bühne), höchstens PARALLEL gleichzeitig,
+// mit niedriger Priorität. Die ersten VORLADEN Bilder sofort, alle übrigen erst nach VERWEILEN_MS auf der Seite,
+// damit wer gleich wieder geht, nicht den ganzen Abschnitt lädt. So ist beim frühen Wischen schon eine über die
+// ganze Fahrt verteilte Auswahl da. Erst nach dem Startbild, damit nichts davon mit dem grössten Bild (LCP) um die
+// Leitung konkurriert. Startet die Bühne (erste Eingabe), übernimmt sie das Laden und das Vorladen hört auf.
+// Keine Bilder bei reduzierter Bewegung, Save-Data oder 2g, und nicht, wenn die Bühne schon läuft.
 const VORLADEN = 8;
+const VERWEILEN_MS = 2000;
 const RUECKFALL_MS = 3000; // ohne Meldung des grössten Bilds (Browser ohne diese Messung): so lange nach dem Laden
 
 function nachDemStartbild(fn) {
@@ -131,18 +136,45 @@ function nachDemStartbild(fn) {
     });
     beobachter.observe({ type: 'largest-contentful-paint', buffered: true });
   }
+  // Meldet der Browser ein anderes Element als grösstes (gemessen: sporadisch bei 1.6 Mbit/s), käme sonst erst der
+  // Rückfall nach 3 s. Ist das Startbild geladen, steht es nach dem nächsten gemalten Bild ohnehin auf dem Schirm.
+  const gemalt = () => requestAnimationFrame(() => requestAnimationFrame(los));
+  if (startbild?.complete && startbild.naturalWidth > 0) gemalt();
+  else startbild?.addEventListener('load', gemalt, { once: true });
   setTimeout(los, RUECKFALL_MS);
 }
+const vorgeladen = []; // hält die Bilder fest, damit die Bühne sie im selben Dokument wiederverwendet
 async function vorladen() {
   const m = await ladeModule();
   if (aktiv || m.reduziertGewuenscht()) return;
   const abschnitt = m.leseManifest(wurzel)?.abschnitte.find((a) => a.id === 'start-buero');
   if (!abschnitt) return;
-  for (const url of m.fahrtBilder(abschnitt).slice(0, VORLADEN)) {
-    const bild = new Image();
-    bild.decoding = 'async';
-    bild.src = url;
-  }
+  const urls = m.fahrtBilder(abschnitt);
+  const folge = m.ladeReihenfolge(urls.length);
+  let naechster = 0;
+  let offen = 0;
+  let grenze = Math.min(VORLADEN, folge.length);
+  const weiter = () => {
+    while (!aktiv && offen < m.PARALLEL && naechster < grenze) {
+      const bild = new Image();
+      bild.decoding = 'async';
+      bild.fetchPriority = 'low';
+      const fertig = () => {
+        offen--;
+        weiter();
+      };
+      bild.addEventListener('load', fertig, { once: true });
+      bild.addEventListener('error', fertig, { once: true });
+      offen++;
+      bild.src = urls[folge[naechster++]];
+      vorgeladen.push(bild);
+    }
+  };
+  weiter();
+  setTimeout(() => {
+    grenze = folge.length;
+    weiter();
+  }, VERWEILEN_MS);
 }
 const imLeerlauf = () => (window.requestIdleCallback ? requestIdleCallback(vorladen, { timeout: 2000 }) : setTimeout(vorladen, 500));
 const spaeter = () =>
