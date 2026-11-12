@@ -2,13 +2,16 @@
 // Der Scrollfortschritt (fortschritt.mjs) wählt das Bild der Fahrt.
 //
 // - Natives Scrollen, nur passive scroll- und resize-Lauscher, kein Mausrad- oder Touch-Lauscher.
-// - Laden je Abschnitt: aktueller und der nächste in Fahrtrichtung (rückwärts gescrollt der vorherige), nie mehr.
-//   Im aktuellen Abschnitt zuerst die acht Bilder ab der Lage in Fahrtrichtung, dann grob vor fein. Der nächste
-//   startet bei halb geladenem aktuellem Abschnitt; beide teilen sich PARALLEL Anfragen, der aktuelle zuerst.
+// - Laden je Abschnitt: aktueller, nächster und übernächster in Fahrtrichtung (rückwärts gescrollt die vorherigen),
+//   nie mehr. Im aktuellen Abschnitt zuerst die acht Bilder ab der Lage in Fahrtrichtung, dann grob vor fein. Der
+//   nächste startet bei halb geladenem aktuellem Abschnitt; beide teilen sich PARALLEL Anfragen, der aktuelle zuerst.
+//   Der übernächste steht ab dem ersten Wisch in der Ladefolge (grob vor fein), bekommt aber nur Plätze, die
+//   aktueller und nächster nicht mehr brauchen, und fragt mit niedriger Priorität an.
 //   Die Ladereihenfolge ändert nur, wann ein Bild da ist, nie welches Bild an welcher Lage gezeigt wird.
 // - Jedes Bild wird mit img.decode() decodiert, bevor es gezeigt wird. Fehlt ein Bild, bleibt das letzte stehen.
 // - Reduzierte Bewegung, Save-Data, 2g oder slow-2g: keine Fahrtbilder, nur Überblendung der Schlüsselbilder.
-//   Auf 3g läuft die Fahrt mit der kleineren Bildstufe.
+//   Auf 3g läuft die Fahrt quer mit der kleineren Bildstufe. Im Hochformat wählt nur das Gerät die Stufe
+//   (Bühnenbreite, waehleVariante), nie das Netz.
 // - Fehlt ein Abschnitt im Manifest (oder das Manifest ganz): Überblendung der Schlüsselbilder, keine Anfrage.
 // - Die Schlüsselbilder sind die <picture> der Abschnitte (HTML, ohne JavaScript sichtbar); die Bühne zeichnet
 //   deren vom Browser gewählte Datei (currentSrc), lädt also nichts doppelt.
@@ -84,16 +87,27 @@ async function ladeManifest(option, wurzel) {
   return { manifest: leseManifest(wurzel), basis: '/bilder/fahrt/' };
 }
 
+// Hochformat: kleinste Stufe hoch-<breite>, deren Breite für die Bühnenbreite in CSS-Pixeln mal min(DPR, HOCH_DICHTE)
+// reicht, mit derselben Toleranz 0.8 wie quer. Handys bis 450 CSS-Pixel Breite nehmen so hoch-540, breitere Geräte
+// hoch-720. Die Wahl hängt nur am Gerät, nie am Netz. Ohne hochBreiten im Manifest gibt es nur hoch-720.
+export const HOCH_DICHTE = 1.5;
 export function waehleVariante(abschnitt) {
-  if (abschnitt.hoch && window.matchMedia('(orientation: portrait)').matches) return 'hoch-720';
+  if (abschnitt.hoch && window.matchMedia('(orientation: portrait)').matches) {
+    const stufen = [...(abschnitt.hochBreiten ?? [720])].sort((a, b) => a - b);
+    const noetig = window.innerWidth * Math.min(window.devicePixelRatio || 1, HOCH_DICHTE);
+    return `hoch-${stufen.find((b) => b >= noetig * 0.8) ?? stufen[stufen.length - 1]}`;
+  }
   const noetig = Math.max(window.innerWidth, window.innerHeight * 1.5) * Math.min(window.devicePixelRatio || 1, 2);
   const breiten = [...abschnitt.breiten].sort((a, b) => a - b);
   if (knappesNetz()) return String(breiten[0]);
   return String(breiten.find((b) => b >= noetig * 0.8) ?? breiten[breiten.length - 1]);
 }
 
+// Mit "stand" im Manifest liegen die Bilder in einem eigenen Unterordner je Fassung (<id>/<stand>/<variante>/), damit
+// ein Browser nach einer neuen Fassung nie Bilder aus beiden Fassungen mischt.
 export function fahrtBilder(abschnitt, basis = '/bilder/fahrt/', variante = waehleVariante(abschnitt)) {
-  return Array.from({ length: Math.min(abschnitt.bilder, 90) }, (_, i) => `${basis}${abschnitt.id}/${variante}/${String(i + 1).padStart(3, '0')}.avif`);
+  const ordner = `${basis}${abschnitt.id}/${abschnitt.stand ? `${abschnitt.stand}/` : ''}${variante}/`;
+  return Array.from({ length: Math.min(abschnitt.bilder, 90) }, (_, i) => `${ordner}${String(i + 1).padStart(3, '0')}.avif`);
 }
 
 // Lage zwischen zwei Fahrtbildern: unteres Bild i0, oberes i1, Anteil t von i1 (0 bis unter 1).
@@ -308,21 +322,29 @@ export function starteBuehne(wurzel, optionen = {}) {
     return n;
   }
 
-  // Freie Plätze verteilen: zuerst an den aktuellen Abschnitt, dann an den nächsten.
+  // Freie Plätze verteilen: zuerst an den aktuellen Abschnitt, dann an den nächsten, zuletzt an den übernächsten.
   function verteile() {
     if (gestoppt) return;
     const { k } = lage();
     const reihe = [...cache.values()].filter((e) => e.weiter && !e.fertig && !e.abgebrochen);
-    reihe.sort((x, y) => (y.k === k) - (x.k === k));
+    reihe.sort((x, y) => Math.abs(x.k - k) - Math.abs(y.k - k));
     for (const e of reihe) e.weiter();
   }
 
-  // Höchstzahl eigener Anfragen eines Abschnitts, solange beide noch unangefragte Bilder haben: der nächste
-  // NACHBAR_PLAETZE, der aktuelle den Rest. Hat nur einer noch Bilder offen, bekommt er alle Plätze.
+  // Höchstzahl eigener Anfragen eines Abschnitts, solange aktueller und nächster noch unangefragte Bilder haben: der
+  // nächste NACHBAR_PLAETZE, der aktuelle den Rest. Hat nur einer noch Bilder offen, bekommt er alle Plätze. Der
+  // übernächste bekommt erst Plätze, wenn der nächste läuft und beide davor alles angefragt haben.
   function plaetzeFuer(eintrag) {
     const { k } = lage();
-    const andere = [...cache.values()].some((e) => e !== eintrag && !e.abgebrochen && !e.fertig && e.offen());
-    if (!andere) return PARALLEL;
+    const vorne = [...cache.values()].some(
+      (e) => e !== eintrag && Math.abs(e.k - k) < 2 && !e.abgebrochen && !e.fertig && e.offen(),
+    );
+    if (Math.abs(eintrag.k - k) >= 2) {
+      const naechster = abschnittFuer(k + richtung);
+      if (vorne || (naechster && !cache.has(naechster.id))) return 0;
+      return PARALLEL;
+    }
+    if (!vorne) return PARALLEL;
     return eintrag.k === k ? PARALLEL - NACHBAR_PLAETZE : NACHBAR_PLAETZE;
   }
 
@@ -366,12 +388,14 @@ export function starteBuehne(wurzel, optionen = {}) {
         return;
       }
       const plaetze = plaetzeFuer(eintrag);
+      const niedrig = plaetze > 0 && Math.abs(eintrag.k - lage().k) >= 2;
       while (offen < plaetze && offenAlle() < PARALLEL && naechster < folge.length) {
         const i = folge[naechster++];
         offen++;
         const img = new Image();
         eintrag.laufend.add(img);
         img.decoding = 'async';
+        if (niedrig) img.fetchPriority = 'low';
         img.src = urls[i];
         img.decode().then(
           () => {
@@ -407,13 +431,15 @@ export function starteBuehne(wurzel, optionen = {}) {
     canvas.dataset.geladen = [...cache].filter(([, e]) => e.fertig && e.fehler < e.urls.length).map(([id]) => id).join(',');
   }
 
-  // Nur der aktuelle und der nächste Abschnitt in Fahrtrichtung bleiben im Speicher; geladen wird der Nachbar,
-  // sobald der aktuelle zu NACHBAR_AB geladen ist (mit NACHBAR_PLAETZE, bis der aktuelle alles angefragt hat).
+  // Nur der aktuelle, der nächste und der übernächste Abschnitt in Fahrtrichtung bleiben im Speicher; geladen wird
+  // der Nachbar, sobald der aktuelle zu NACHBAR_AB geladen ist (mit NACHBAR_PLAETZE, bis der aktuelle alles angefragt
+  // hat). Der übernächste steht sofort in der Ladefolge, Plätze bekommt er erst nach den beiden (plaetzeFuer).
   function nachladen() {
     if (gestoppt || !manifest || reduziert) return;
     const { k } = lage();
     const nachbar = richtung < 0 ? k - 1 : k + 1;
-    const behalten = new Set([abschnittFuer(k)?.id, abschnittFuer(nachbar)?.id].filter(Boolean));
+    const uebernaechster = richtung < 0 ? k - 2 : k + 2;
+    const behalten = new Set([abschnittFuer(k)?.id, abschnittFuer(nachbar)?.id, abschnittFuer(uebernaechster)?.id].filter(Boolean));
     for (const [id, e] of cache) {
       if (!behalten.has(id)) {
         verwirf(e);
@@ -428,6 +454,7 @@ export function starteBuehne(wurzel, optionen = {}) {
       const e = aktuell ? cache.get(aktuell.id) : null;
       if (!e || e.fertig || e.geladen >= e.urls.length * NACHBAR_AB) ladeAbschnitt(nachbar);
     }
+    ladeAbschnitt(uebernaechster);
   }
 
   // Passt die geladene Variante nicht mehr zur Fenstergrösse, wird der Abschnitt neu geladen. Die bisherigen
