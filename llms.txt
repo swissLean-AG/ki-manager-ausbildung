@@ -2,13 +2,17 @@
 
 > Praxisausbildung für Schweizer KMU: In rund drei Monaten und sechs Online-Sessions baut eine Person aus dem Betrieb eigene KI-Werkzeuge und KI-Agenten für die eigenen Abläufe. Anbieterin ist die swissLean AG in Pfäffikon SZ. Sie begleitet KMU mit Prozessanalyse, Lean Management, Automatisierung und KI. Kosten auf Anfrage im Informationsgespräch.
 
-Stand: 11.11.2026. Alle Inhalte auf Deutsch (Schweiz). Zahlen auf den Seiten sind belegt oder als Erfahrungswert bzw. Einschätzung der swissLean AG gekennzeichnet, Angaben von Teilnehmenden sind als ihre eigenen Angaben ausgewiesen.
+Stand: 12.11.2026. Alle Inhalte auf Deutsch (Schweiz). Zahlen auf den Seiten sind belegt oder als Erfahrungswert bzw. Einschätzung der swissLean AG gekennzeichnet, Angaben von Teilnehmenden sind als ihre eigenen Angaben ausgewiesen.
 
 ## Ausbildung
 
-- [Startseite](https://ki-manager-ausbildung.ch/): Von der Anfrage bis zur Schlussrechnung: wo KI im Hauptprozess eines Betriebs Zeit zurückgibt und wie du dein KI-Betriebssystem baust, mit Stimmen von Teilnehmenden und Buchung des Infogesprächs.
+- [Startseite](https://ki-manager-ausbildung.ch/): Von der Anfrage bis zur Schlussrechnung: wo KI im Hauptprozess eines Betriebs Zeit zurückgibt und wie du dein KI-Betriebssystem baust, mit Stimmen von Teilnehmenden, Anmeldung und Buchung des Infogesprächs.
 - [Ausbildung](https://ki-manager-ausbildung.ch/ausbildung/): Aufbau, Inhalte, Ablauf und Leitung der KI-Manager-Ausbildung.
 - [Fragen und Antworten](https://ki-manager-ausbildung.ch/fragen/): Antworten für Chefs und Mitarbeitende zu Ablauf, Technik, Datenschutz und Abschluss.
+
+## Anmeldung
+
+- [Anmeldung und Anfrage](https://anmeldung.ki-manager-ausbildung.ch/): Anmeldeseite der swissLean AG für die KI-Manager-Ausbildung. Dort meldest du dich selbst an, meldest jemanden an oder stellst eine allgemeine Anfrage, jeweils für eine Firma oder als Privatperson.
 
 ## Fakten zur Ausbildung
 
@@ -41,5 +45,6 @@ Stand: 11.11.2026. Alle Inhalte auf Deutsch (Schweiz). Zahlen auf den Seiten sin
 
 - Anbieterin: swissLean AG, Churerstrasse 88, 8808 Pfäffikon SZ, https://swiss-lean.ch/
 - E-Mail: stefan.bischof@swiss-lean.ch
+- Telefon: +41 55 415 33 33
+- [Anmeldung und Anfrage](https://anmeldung.ki-manager-ausbildung.ch/)
 - [Infogespräch per Teams buchen](https://bookings.cloud.microsoft/book/Grobanalyse@swiss-lean.ch/s/bb764048-fe34-4ce4-ada8-b9b99915b2b5/)
-- [Infogespräch per Telefon buchen](https://bookings.cloud.microsoft/book/Grobanalyse@swiss-lean.ch/s/b6294d36-11c7-4c50-9d88-4ff55533c0d4/)
