@@ -15,7 +15,7 @@
         540,
         720
       ],
-      "stand": "c33"
+      "stand": "rf33"
     },
     {
       "id": "buero-planung",
@@ -31,7 +31,7 @@
         540,
         720
       ],
-      "stand": "c33"
+      "stand": "rf33"
     },
     {
       "id": "planung-werkstatt",
@@ -47,7 +47,7 @@
         540,
         720
       ],
-      "stand": "c33"
+      "stand": "rf33"
     },
     {
       "id": "werkstatt-lager",
@@ -63,7 +63,7 @@
         540,
         720
       ],
-      "stand": "c33"
+      "stand": "rf33"
     },
     {
       "id": "lager-baustelle",
@@ -79,7 +79,7 @@
         540,
         720
       ],
-      "stand": "c33"
+      "stand": "rf33"
     },
     {
       "id": "baustelle-dienstleistung",
@@ -95,7 +95,7 @@
         540,
         720
       ],
-      "stand": "c33"
+      "stand": "rf33"
     },
     {
       "id": "dienstleistung-chefetage",
@@ -111,7 +111,7 @@
         540,
         720
       ],
-      "stand": "c33"
+      "stand": "rf33"
     },
     {
       "id": "chefetage-finale",
@@ -127,7 +127,7 @@
         540,
         720
       ],
-      "stand": "c33"
+      "stand": "rf33"
     }
   ]
 }
